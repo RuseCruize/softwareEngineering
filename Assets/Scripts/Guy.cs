@@ -5,7 +5,6 @@ using UnityEngine;
 public class Guy : MonoBehaviour
 {
     public int health;
-    public int moveSpeed;
 
     // Start is called before the first frame update
     void Start()
