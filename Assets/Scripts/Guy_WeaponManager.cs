@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class Guy_WeaponManager : MonoBehaviour
 {
-    public bool Aiming = false;
-    public bool canFire = false;
     public Guy_Weapon primaryWeapon;
     public Guy_Weapon secondaryWeapon;
 
