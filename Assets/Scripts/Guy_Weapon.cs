@@ -17,7 +17,6 @@ public class Guy_Weapon : MonoBehaviour
     public float lookAngle;
     public int bulletsPerMagazine = 1;
     public float weaponDamage = 30;
-    public float timeToReload = 0f;
     public AudioClip fireAudio;
 
     [HideInInspector]
@@ -26,30 +25,31 @@ public class Guy_Weapon : MonoBehaviour
     float nextFireTime = 0;
     int bulletsPerMagazineDefault = 1;
     AudioSource audioSource;
+    SpriteRenderer sprite;
     void Start()
     {
-        bulletsPerMagazine = bulletsPerMagazineDefault;
         audioSource = GetComponent<AudioSource>();
         audioSource.playOnAwake = false;
-        audioSource.spatialBlend = 1f;     
-        canFire = true;   
+        audioSource.spatialBlend = 1f;
+        manager.canFire = true;
+        sprite = GetComponent<SpriteRenderer>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Aiming) { 
+        if (manager.Aiming) { 
             lookDirection = Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position;
             lookAngle = Mathf.Atan2(lookDirection.y, lookDirection.x) * Mathf.Rad2Deg;
             transform.rotation = Quaternion.Euler(0f, 0f, lookAngle - 90f);
             if (Input.GetMouseButtonDown(0)) {
                 Fire();
-                Aiming = false;
+                manager.Aiming = false;
                 return;
             }
         }
         if (Input.GetMouseButtonDown(0)) {
-            Aiming = true;
+            manager.Aiming = true;
         }
         
     }
@@ -60,12 +60,14 @@ public class Guy_Weapon : MonoBehaviour
     }
 
     public void ActivateWeapon(bool activate) {
-        StopAllCoroutines();
-        canFire = true;
+        if (sprite == null) {
+            sprite = GetComponent<SpriteRenderer>();
+        }
+        if (activate == true) {
+            sprite.color = new Color(1,1,1,1);
+        } else {
+            sprite.color = new Color(1,1,1,0);
+        }
         gameObject.SetActive(activate);
-    }
-
-    public void DeactivateWeapon(bool deactivate) {
-        
     }
 }
