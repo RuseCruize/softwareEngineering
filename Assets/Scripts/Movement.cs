@@ -6,13 +6,7 @@ public class Movement : MonoBehaviour
 {
     public float speed;
     public Rigidbody2D body;
-    private BoxCollider2D boxCollider;
     public LayerMask groundLayer;
-
-    private void Awake()
-    {
-        boxCollider = gameObject.GetComponent<BoxCollider2D> ();
-    }
 
     // Update is called once per frame
     void Update()
