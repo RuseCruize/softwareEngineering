@@ -24,6 +24,20 @@ public class Guy_WeaponManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (Input.GetKeyDown("1")) {
+            if (selectedWeapon != primaryWeapon) {
+                primaryWeapon.ActivateWeapon(true);
+                secondaryWeapon.ActivateWeapon(false);
+                selectedWeapon = primaryWeapon;
+            }
+        }
+        if (Input.GetKeyDown("2")) {
+            if (selectedWeapon != secondaryWeapon) {
+                primaryWeapon.ActivateWeapon(false);
+                secondaryWeapon.ActivateWeapon(true);
+                selectedWeapon = secondaryWeapon;                
+            }
+        }
         
     }
 }
