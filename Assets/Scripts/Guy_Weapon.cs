@@ -7,10 +7,12 @@ using UnityEngine;
 public class Guy_Weapon : MonoBehaviour
 {
     // Start is called before the first frame update
-    private Transform weaponTip;
+    public Transform weaponTip;
+    public bool Aiming = false;
+    public bool canFire = false;
     public bool singleFire = true;
     public float fireRate = 1.0f;
-    public GameObject bulletPrefab;
+    public GameObject Guy_Bullet;
     public Vector2 lookDirection;
     public float lookAngle;
     public int bulletsPerMagazine = 1;
@@ -29,33 +31,27 @@ public class Guy_Weapon : MonoBehaviour
         bulletsPerMagazine = bulletsPerMagazineDefault;
         audioSource = GetComponent<AudioSource>();
         audioSource.playOnAwake = false;
-        audioSource.spatialBlend = 1f;        
+        audioSource.spatialBlend = 1f;     
+        canFire = true;   
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (manager.Aiming) { 
+        if (Aiming) { 
             lookDirection = Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position;
             lookAngle = Mathf.Atan2(lookDirection.y, lookDirection.x) * Mathf.Rad2Deg;
             transform.rotation = Quaternion.Euler(0f, 0f, lookAngle - 90f);
-        }
-        if (Input.GetMouseButtonDown(0)) {
-            Aim();
-        }
-        
-    }
-
-    void Aim() {
-        if (manager.canFire) {
-            manager.Aiming = true;
-            //figure out how to fire from here
             if (Input.GetMouseButtonDown(0)) {
                 Fire();
+                Aiming = false;
+                return;
             }
-            manager.Aiming = false;
-            //after firing, reset aiming to false
         }
+        if (Input.GetMouseButtonDown(0)) {
+            Aiming = true;
+        }
+        
     }
 
     void Fire() {
@@ -65,7 +61,7 @@ public class Guy_Weapon : MonoBehaviour
 
     public void ActivateWeapon(bool activate) {
         StopAllCoroutines();
-        manager.canFire = true;
+        canFire = true;
         gameObject.SetActive(activate);
     }
 
