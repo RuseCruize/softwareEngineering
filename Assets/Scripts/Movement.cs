@@ -5,6 +5,7 @@ using UnityEngine;
 public class Movement : MonoBehaviour
 {
     public float speed;
+    public float jumpVelocity;
     public Rigidbody2D body;
     public LayerMask groundLayer;
 
@@ -18,7 +19,6 @@ public class Movement : MonoBehaviour
         if (this.isGrounded() && isUp)
         {
             // Jump logic, check to see if touching ground
-            float jumpVelocity = 10;
             body.velocity = Vector2.up * jumpVelocity;
         }
 

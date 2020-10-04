@@ -140,6 +140,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 7
+  jumpVelocity: 10
   body: {fileID: 256833974}
   groundLayer:
     serializedVersion: 2
