@@ -140,7 +140,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 7
+  jumpVelocity: 10
   body: {fileID: 256833974}
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 256
 --- !u!50 &256833974 stripped
 Rigidbody2D:
   m_CorrespondingSourceObject: {fileID: 6353858857245404027, guid: ad5d6aea6bd53af41a70406fdd3838c3,
@@ -224,7 +228,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 519420028}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: -1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -242,7 +246,7 @@ GameObject:
   - component: {fileID: 742469477}
   - component: {fileID: 742469476}
   - component: {fileID: 742469475}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Ground
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -396,6 +400,16 @@ PrefabInstance:
     - target: {fileID: 6353858857245404024, guid: ad5d6aea6bd53af41a70406fdd3838c3,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6353858857245404027, guid: ad5d6aea6bd53af41a70406fdd3838c3,
+        type: 3}
+      propertyPath: m_GravityScale
+      value: 2.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6353858857245404027, guid: ad5d6aea6bd53af41a70406fdd3838c3,
+        type: 3}
+      propertyPath: m_CollisionDetection
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6353858857245404031, guid: ad5d6aea6bd53af41a70406fdd3838c3,
