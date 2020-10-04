@@ -15,6 +15,7 @@ public class Guy_Weapon : MonoBehaviour
     public GameObject Guy_Bullet;
     public Vector2 lookDirection;
     public float lookAngle;
+    public float weaponVelocity = 10f;
     public int bulletsPerMagazine = 1;
     public float weaponDamage = 30;
     public AudioClip fireAudio;
@@ -56,7 +57,7 @@ public class Guy_Weapon : MonoBehaviour
 
     void Fire() {
         GameObject guyBullet = Instantiate(Guy_Bullet, weaponTip.position, weaponTip.rotation);
-        guyBullet.GetComponent<Rigidbody2D>().velocity = weaponTip.up * 10f;
+        guyBullet.GetComponent<Rigidbody2D>().velocity = weaponTip.up * weaponVelocity;
     }
 
     public void ActivateWeapon(bool activate) {
