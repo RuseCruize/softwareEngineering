@@ -44,7 +44,7 @@ public class AI_Enemy : MonoBehaviour
         {
             if(movingRight == true)
             {                
-                rb.velocity = Vector2.up * 1f;
+                //rb.velocity = Vector2.up * 1f;
                 rb.AddForce (Vector2.up * 2f);
                 //transform.eulerAngles = new Vector3(0, -180, 0);
                 //movingRight = false;                
