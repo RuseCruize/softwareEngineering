@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 6353858857245404030}
   - component: {fileID: 6353858857245404027}
   - component: {fileID: 6463235598764109984}
+  - component: {fileID: 2931899098917695378}
   m_Layer: 0
   m_Name: Guy
   m_TagString: Untagged
@@ -125,7 +126,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 2.5
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
@@ -144,4 +145,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 0
-  moveSpeed: 0
+--- !u!114 &2931899098917695378
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6353858857245404031}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 15302012a8bbedc4f839c7016020eb53, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 5
+  jumpVelocity: 10
+  body: {fileID: 6353858857245404027}
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 256
+  IsActive: 0
