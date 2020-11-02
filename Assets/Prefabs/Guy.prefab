@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 6353858857245404030}
   - component: {fileID: 6353858857245404027}
   - component: {fileID: 6463235598764109984}
+  - component: {fileID: -2583657792757173111}
   m_Layer: 0
   m_Name: Guy
   m_TagString: Untagged
@@ -73,7 +74,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: e9cbc4b7b9a39044480a580e36ae5e19, type: 3}
+  m_Sprite: {fileID: 21300000, guid: ac58acd87cd953b4c84401083a3c56dc, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -144,4 +145,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 0
-  moveSpeed: 0
+--- !u!114 &-2583657792757173111
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6353858857245404031}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 15302012a8bbedc4f839c7016020eb53, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 5
+  jumpVelocity: 5
+  body: {fileID: 6353858857245404027}
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 256
+  IsActive: 0
