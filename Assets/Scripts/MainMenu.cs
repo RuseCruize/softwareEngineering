@@ -1,12 +1,12 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class MainMenu : MonoBehaviour
 {
-   public void PlayGame()
+    public void PlayGame()
     {
+        GameManager.STATE.FetchSettings();
         //loads the next scene in the queue
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
