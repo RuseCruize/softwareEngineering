@@ -11,6 +11,12 @@ public class GameManager : MonoBehaviour
     public Dropdown playerDropdown;
     public int numPlayers;
 
+    public Dropdown enemyDropdown;
+    public int computerLevel;
+
+    public int turn;
+    public Player[] players;
+
     // Singleton Pattern
     void Awake()
     {
@@ -26,5 +32,17 @@ public class GameManager : MonoBehaviour
     {
         volume = volumeSlider.value;
         numPlayers = int.Parse(playerDropdown.options[playerDropdown.value].text);
+        computerLevel = enemyDropdown.value;
+    }
+
+    public void StartGame()
+    {
+        players = new Player[2];
+        
+    }
+
+    public void AdvanceTurn()
+    {
+        turn++;
     }
 }
