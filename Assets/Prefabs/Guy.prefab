@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 4633373270405495877}
   - component: {fileID: 2416442037948885646}
   - component: {fileID: 2416442037948885649}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Guy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -143,8 +143,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb682df0afa607d4096470864e01f3ba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 5
-  jumpVelocity: 5
+  speed: 3
+  jumpVelocity: 7
   body: {fileID: 2416442037948885646}
   groundLayer:
     serializedVersion: 2

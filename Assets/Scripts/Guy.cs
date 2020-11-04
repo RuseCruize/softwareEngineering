@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Guy : MonoBehaviour
 {
-    GameObject guyObject;
     public float speed;
     public float jumpVelocity;
     public Rigidbody2D body;
