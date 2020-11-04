@@ -4,17 +4,13 @@ using UnityEngine;
 
 public class Guy : MonoBehaviour
 {
+    GameObject guyObject;
     public int health;
+    public string owner;
 
-    // Start is called before the first frame update
-    void Start()
+    public Guy(Vector3 position, string owner)
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        this.owner = owner;
+        this.health = 100;
     }
 }

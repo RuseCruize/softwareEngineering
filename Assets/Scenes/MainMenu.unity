@@ -816,8 +816,8 @@ MonoBehaviour:
   numPlayers: 0
   enemyDropdown: {fileID: 896576664}
   computerLevel: 0
-  turn: 0
-  players: []
+  guyPrefab: {fileID: 6353858857245404031, guid: ad5d6aea6bd53af41a70406fdd3838c3,
+    type: 3}
 --- !u!4 &456114578
 Transform:
   m_ObjectHideFlags: 0
