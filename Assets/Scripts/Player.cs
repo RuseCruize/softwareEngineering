@@ -38,4 +38,14 @@ public class Player
         GameObject guy = GameObject.Instantiate(GameManager.STATE.guyPrefab, position, Quaternion.identity);
         guys.Add(guy);
     }
+
+    public GameObject GetGuy()
+    {
+        return guys[currentGuy];
+    }
+
+    public void NextGuy()
+    {
+        currentGuy = (currentGuy + 1) % numGuys;
+    }
 }
