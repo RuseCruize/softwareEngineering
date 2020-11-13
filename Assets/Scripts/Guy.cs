@@ -116,6 +116,7 @@ public class Guy : MonoBehaviour
 
     public void Act()
     {
+        // Select Weapon
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             SelectWeapon(Weapon.WeaponType.Machete);
@@ -125,8 +126,10 @@ public class Guy : MonoBehaviour
             SelectWeapon(Weapon.WeaponType.Pistol);
         }
 
+        // Use Weapon
         if (Input.GetKeyDown(KeyCode.P))
         {
+            SelectWeapon(Weapon.WeaponType.Unarmed);
             currentState = State.Waiting;
         }
     }
