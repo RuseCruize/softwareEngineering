@@ -17,6 +17,7 @@ public class Guy : MonoBehaviour
     }
 
     public State currentState;
+    public GameManager.Weapon currentWeapon;
 
     public float speed;
     public float jumpVelocity;
@@ -24,6 +25,7 @@ public class Guy : MonoBehaviour
 
     public Rigidbody2D body;
     public LayerMask groundLayer;
+    public SpriteRenderer spriteRenderer;
 
     public int health;
     public string owner;
@@ -31,8 +33,8 @@ public class Guy : MonoBehaviour
     public Guy(Vector3 position, string owner)
     {
         this.owner = owner;
-        this.health = 100;
-        this.currentState = State.Waiting;
+        health = 100;
+        currentState = State.Waiting;
     }
 
     bool isGrounded()
@@ -45,6 +47,7 @@ public class Guy : MonoBehaviour
     {
         startPosition = transform.position.x;
         currentState = State.Moving;
+        currentWeapon = GameManager.Weapon.Unarmed;
     }
 
     public void Move()
@@ -53,6 +56,16 @@ public class Guy : MonoBehaviour
         bool endTurn = Input.GetKey(KeyCode.Space);
         float leftSpeed = Input.GetKey(KeyCode.LeftArrow) ? -speed : 0;
         float rightSpeed = Input.GetKey(KeyCode.RightArrow) ? speed : 0;
+
+        if (rightSpeed != 0)
+        {
+            spriteRenderer.flipX = false;
+        }
+        else
+        {
+            spriteRenderer.flipX = true;
+        }
+
 
         if (this.isGrounded() && isUp)
         {
@@ -72,25 +85,34 @@ public class Guy : MonoBehaviour
         }
     }
 
+    void SelectWeapon(GameManager.Weapon weapon)
+    {
+        currentWeapon = weapon;
+
+        switch (weapon)
+        {
+            case GameManager.Weapon.Machete:
+                break;
+
+            case GameManager.Weapon.Pistol:
+                break;
+        }
+    }
+
     public void Act()
     {
-        if (Input.GetKeyDown("1"))
+        if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            if (selectedWeapon != primaryWeapon)
-            {
-                primaryWeapon.ActivateWeapon(true);
-                secondaryWeapon.ActivateWeapon(false);
-                selectedWeapon = primaryWeapon;
-            }
+            SelectWeapon(GameManager.Weapon.Machete);
         }
-        if (Input.GetKeyDown("2"))
+        if (Input.GetKeyDown(KeyCode.Alpha2))
         {
-            if (selectedWeapon != secondaryWeapon)
-            {
-                primaryWeapon.ActivateWeapon(false);
-                secondaryWeapon.ActivateWeapon(true);
-                selectedWeapon = secondaryWeapon;
-            }
+            SelectWeapon(GameManager.Weapon.Pistol);
+        }
+
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            currentState = State.Waiting;
         }
     }
 }

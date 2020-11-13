@@ -27,6 +27,13 @@ public class GameManager : MonoBehaviour
         DontDestroyOnLoad(this);
     }
 
+    public enum Weapon
+    {
+        Unarmed,
+        Machete,
+        Pistol
+    }
+
     public void FetchSettings()
     {
         volume = volumeSlider.value;
