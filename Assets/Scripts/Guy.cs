@@ -101,13 +101,29 @@ public class Guy : MonoBehaviour
             case Weapon.WeaponType.Machete:
                 currentWeapon = GameObject.Instantiate(GameManager.STATE.Machete);
                 currentWeapon.transform.parent = transform;
-                currentWeapon.transform.position = transform.position + new Vector3(0.55f, -0.4f, 0);
+                if (spriteRenderer.flipX)
+                {
+                    currentWeapon.transform.position = transform.position + new Vector3(-0.55f, -0.4f, 0);
+                    currentWeapon.GetComponent<SpriteRenderer>().flipX = true;
+                }
+                else
+                {
+                    currentWeapon.transform.position = transform.position + new Vector3(0.55f, -0.4f, 0);
+                }
                 break;
 
             case Weapon.WeaponType.Pistol:
                 currentWeapon = GameObject.Instantiate(GameManager.STATE.Pistol);
                 currentWeapon.transform.parent = transform;
-                currentWeapon.transform.position = transform.position + new Vector3(0.45f, -0.3f, 0);
+                if (spriteRenderer.flipX)
+                {
+                    currentWeapon.transform.position = transform.position + new Vector3(-0.45f, -0.3f, 0);
+                    currentWeapon.GetComponent<SpriteRenderer>().flipX = true;
+                }
+                else
+                {
+                    currentWeapon.transform.position = transform.position + new Vector3(0.45f, -0.3f, 0);
+                }
                 break;
         }
 
@@ -124,6 +140,14 @@ public class Guy : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
             SelectWeapon(Weapon.WeaponType.Pistol);
+        }
+
+        // Aim Weapon
+        if (currentWeapon != null)
+        {
+            Vector3 lookDirection = Camera.main.ScreenToWorldPoint(Input.mousePosition) - currentWeapon.transform.position;
+            float lookAngle = Mathf.Atan2(lookDirection.y, lookDirection.x) * Mathf.Rad2Deg;
+            currentWeapon.transform.rotation = Quaternion.Euler(0f, 0f, lookAngle - 90f);
         }
 
         // Use Weapon
