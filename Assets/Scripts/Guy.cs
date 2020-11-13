@@ -17,7 +17,8 @@ public class Guy : MonoBehaviour
     }
 
     public State currentState;
-    public GameManager.Weapon currentWeapon;
+    public Weapon.WeaponType currentWeaponType;
+    public GameObject currentWeapon;
 
     public float speed;
     public float jumpVelocity;
@@ -47,7 +48,8 @@ public class Guy : MonoBehaviour
     {
         startPosition = transform.position.x;
         currentState = State.Moving;
-        currentWeapon = GameManager.Weapon.Unarmed;
+        currentWeaponType = Weapon.WeaponType.Unarmed;
+        currentWeapon = null;
     }
 
     public void Move()
@@ -85,29 +87,38 @@ public class Guy : MonoBehaviour
         }
     }
 
-    void SelectWeapon(GameManager.Weapon weapon)
+    void SelectWeapon(Weapon.WeaponType weaponType)
     {
-        currentWeapon = weapon;
-
-        switch (weapon)
+        if (currentWeapon != null)
         {
-            case GameManager.Weapon.Machete:
+            GameObject.Destroy(currentWeapon);
+        }
+
+        currentWeaponType = weaponType;
+
+        switch (weaponType)
+        {
+            case Weapon.WeaponType.Machete:
+                currentWeapon = GameObject.Instantiate(GameManager.STATE.Machete);
                 break;
 
-            case GameManager.Weapon.Pistol:
+            case Weapon.WeaponType.Pistol:
+                currentWeapon = GameObject.Instantiate(GameManager.STATE.Pistol);
                 break;
         }
+
+        currentWeapon.transform.parent = transform;
     }
 
     public void Act()
     {
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            SelectWeapon(GameManager.Weapon.Machete);
+            SelectWeapon(Weapon.WeaponType.Machete);
         }
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
-            SelectWeapon(GameManager.Weapon.Pistol);
+            SelectWeapon(Weapon.WeaponType.Pistol);
         }
 
         if (Input.GetKeyDown(KeyCode.P))

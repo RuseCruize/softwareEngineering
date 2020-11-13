@@ -16,6 +16,9 @@ public class GameManager : MonoBehaviour
 
     public GameObject guyPrefab;
 
+    public GameObject Machete;
+    public GameObject Pistol;
+
     // Singleton Pattern
     void Awake()
     {
@@ -25,13 +28,6 @@ public class GameManager : MonoBehaviour
             STATE = this;
 
         DontDestroyOnLoad(this);
-    }
-
-    public enum Weapon
-    {
-        Unarmed,
-        Machete,
-        Pistol
     }
 
     public void FetchSettings()
