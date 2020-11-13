@@ -32,6 +32,7 @@ public class Guy : MonoBehaviour
     {
         this.owner = owner;
         this.health = 100;
+        this.currentState = State.Waiting;
     }
 
     bool isGrounded()
@@ -43,6 +44,7 @@ public class Guy : MonoBehaviour
     public void Activate()
     {
         startPosition = transform.position.x;
+        currentState = State.Moving;
     }
 
     public void Move()
@@ -72,9 +74,23 @@ public class Guy : MonoBehaviour
 
     public void Act()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown("1"))
         {
-            currentState = State.Waiting;
+            if (selectedWeapon != primaryWeapon)
+            {
+                primaryWeapon.ActivateWeapon(true);
+                secondaryWeapon.ActivateWeapon(false);
+                selectedWeapon = primaryWeapon;
+            }
+        }
+        if (Input.GetKeyDown("2"))
+        {
+            if (selectedWeapon != secondaryWeapon)
+            {
+                primaryWeapon.ActivateWeapon(false);
+                secondaryWeapon.ActivateWeapon(true);
+                selectedWeapon = secondaryWeapon;
+            }
         }
     }
 }
