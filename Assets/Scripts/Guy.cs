@@ -103,12 +103,12 @@ public class Guy : MonoBehaviour
                 currentWeapon.transform.parent = transform;
                 if (spriteRenderer.flipX)
                 {
-                    currentWeapon.transform.position = transform.position + new Vector3(-0.55f, -0.4f, 0);
+                    currentWeapon.transform.position = transform.position + new Vector3(-0.2f, -0.4f, 0);
                     currentWeapon.GetComponent<SpriteRenderer>().flipX = true;
                 }
                 else
                 {
-                    currentWeapon.transform.position = transform.position + new Vector3(0.55f, -0.4f, 0);
+                    currentWeapon.transform.position = transform.position + new Vector3(0.2f, -0.4f, 0);
                 }
                 break;
 
@@ -117,12 +117,12 @@ public class Guy : MonoBehaviour
                 currentWeapon.transform.parent = transform;
                 if (spriteRenderer.flipX)
                 {
-                    currentWeapon.transform.position = transform.position + new Vector3(-0.45f, -0.3f, 0);
+                    currentWeapon.transform.position = transform.position + new Vector3(-0.2f, -0.45f, 0);
                     currentWeapon.GetComponent<SpriteRenderer>().flipX = true;
                 }
                 else
                 {
-                    currentWeapon.transform.position = transform.position + new Vector3(0.45f, -0.3f, 0);
+                    currentWeapon.transform.position = transform.position + new Vector3(0.2f, -0.45f, 0);
                 }
                 break;
         }
@@ -147,7 +147,25 @@ public class Guy : MonoBehaviour
         {
             Vector3 lookDirection = Camera.main.ScreenToWorldPoint(Input.mousePosition) - currentWeapon.transform.position;
             float lookAngle = Mathf.Atan2(lookDirection.y, lookDirection.x) * Mathf.Rad2Deg;
-            currentWeapon.transform.rotation = Quaternion.Euler(0f, 0f, lookAngle - 90f);
+
+            if (currentWeapon.GetComponent<SpriteRenderer>().flipX)
+            {
+                if (lookAngle > 90)
+                {
+                    lookAngle = Mathf.Clamp(lookAngle, 130, 180);
+                }
+                else
+                {
+                    lookAngle = Mathf.Clamp(lookAngle, -180, -130);
+                }
+                Debug.Log(lookAngle);
+                lookAngle = lookAngle + 180;
+            }
+            else
+            {
+                lookAngle = Mathf.Clamp(lookAngle, -50f, 50f);
+            }
+            currentWeapon.transform.rotation = Quaternion.Euler(0f, 0f, lookAngle);
         }
 
         // Use Weapon
