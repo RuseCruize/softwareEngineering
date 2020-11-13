@@ -4,13 +4,28 @@ using UnityEngine;
 
 public class Guy : MonoBehaviour
 {
+    public static int maxDistance = 5;
+
+    public float startPosition;
+
+    public enum State
+    {
+        Moving,
+        Acting,
+        Waiting,
+        Dead
+    }
+
+    public State currentState;
+
     public float speed;
     public float jumpVelocity;
+    public float distanceMoved;
+
     public Rigidbody2D body;
     public LayerMask groundLayer;
+
     public int health;
-    public int distanceMoved;
-    public static int totalDistance = 1000;
     public string owner;
 
     public Guy(Vector3 position, string owner)
@@ -23,6 +38,11 @@ public class Guy : MonoBehaviour
     {
         RaycastHit2D raycastHit = Physics2D.Raycast(transform.position, Vector2.down, 1, groundLayer);
         return raycastHit.collider != null;
+    }
+
+    public void Activate()
+    {
+        startPosition = transform.position.x;
     }
 
     public void Move()
@@ -40,18 +60,19 @@ public class Guy : MonoBehaviour
         transform.position += transform.right * leftSpeed * Time.deltaTime;
         transform.position += transform.right * rightSpeed * Time.deltaTime;
 
-        if (isUp || (leftSpeed < 0 || rightSpeed > 0) && (leftSpeed + rightSpeed != 0))
-            distanceMoved++;
+        float endPosition = transform.position.x;
+        distanceMoved = Mathf.Abs(startPosition - endPosition);
+        if (distanceMoved >= maxDistance)
+        {
+            currentState = State.Acting;
+        }
     }
 
-    public bool FullMovement()
+    public void Act()
     {
-        if (distanceMoved >= totalDistance)
+        if (Input.GetKeyDown(KeyCode.Space))
         {
-            distanceMoved = 0;
-            return true;
+            currentState = State.Waiting;
         }
-        else
-            return false;
     }
 }
