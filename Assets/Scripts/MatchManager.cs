@@ -7,6 +7,7 @@ public class MatchManager : MonoBehaviour
     public int numGuys;
     private int numPlayers;
     public List<GameObject> spawnPoints;
+    public Guy currentGuy;
 
     public int turn;
     public Player[] players;
@@ -26,6 +27,7 @@ public class MatchManager : MonoBehaviour
 
         CreatePlayers();
         SpawnGuys();
+        StartGame();
         started = true;
     }
 
@@ -38,8 +40,6 @@ public class MatchManager : MonoBehaviour
         {
             players[i] = new Player("Player " + i, numGuys, GameManager.STATE.computerLevel); // potentially AI
         }
-        
-        currentPlayer = 0;
     }
 
     public void SpawnGuys()
@@ -94,19 +94,43 @@ public class MatchManager : MonoBehaviour
         return false;
     }
 
+    void StartGame()
+    {
+        currentPlayer = 0;
+        currentGuy = players[currentPlayer].GetGuy().GetComponent<Guy>();
+        currentGuy.Activate();
+    }
+
+    void NextTurn()
+    {
+        currentPlayer = (currentPlayer + 1) % players.Length;
+        players[currentPlayer].NextGuy();
+        currentGuy = players[currentPlayer].GetGuy().GetComponent<Guy>();
+        currentGuy.Activate();
+    }
+
     void Update()
     {
         if (GameContinues())
         {
-            if (Input.GetKeyDown(KeyCode.Space))
+            switch(currentGuy.currentState)
             {
-                players[currentPlayer].NextGuy();
-                currentPlayer = (currentPlayer + 1) % players.Length;
-            }
+                case Guy.State.Moving:
+                    currentGuy.Move();
+                    break;
 
-            GameObject currentGuy = players[currentPlayer].GetGuy();
-            currentGuy.GetComponent<Guy>().Move();
-            
+                case Guy.State.Acting:
+                    currentGuy.Act();
+                    break;
+
+                case Guy.State.Waiting:
+                    this.NextTurn();
+                    break;
+
+                case Guy.State.Dead:
+                    Debug.Log("DEAD");
+                    break;
+            }
         }
     }
 }
