@@ -9,6 +9,8 @@ public class Guy : MonoBehaviour
     public Rigidbody2D body;
     public LayerMask groundLayer;
     public int health;
+    public int distanceMoved;
+    public static int totalDistance = 1000;
     public string owner;
 
     public Guy(Vector3 position, string owner)
@@ -37,5 +39,19 @@ public class Guy : MonoBehaviour
 
         transform.position += transform.right * leftSpeed * Time.deltaTime;
         transform.position += transform.right * rightSpeed * Time.deltaTime;
+
+        if (isUp || (leftSpeed < 0 || rightSpeed > 0) && (leftSpeed + rightSpeed != 0))
+            distanceMoved++;
+    }
+
+    public bool FullMovement()
+    {
+        if (distanceMoved >= totalDistance)
+        {
+            distanceMoved = 0;
+            return true;
+        }
+        else
+            return false;
     }
 }

@@ -98,13 +98,14 @@ public class MatchManager : MonoBehaviour
     {
         if (GameContinues())
         {
-            if (Input.GetKeyDown(KeyCode.Space))
+            GameObject currentGuy = players[currentPlayer].GetGuy();
+            if (currentGuy.GetComponent<Guy>().FullMovement())
             {
                 players[currentPlayer].NextGuy();
                 currentPlayer = (currentPlayer + 1) % players.Length;
+                currentGuy = players[currentPlayer].GetGuy();
             }
 
-            GameObject currentGuy = players[currentPlayer].GetGuy();
             currentGuy.GetComponent<Guy>().Move();
             
         }
