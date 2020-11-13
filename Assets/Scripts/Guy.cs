@@ -48,6 +48,7 @@ public class Guy : MonoBehaviour
     public void Move()
     {
         bool isUp = Input.GetKey(KeyCode.UpArrow);
+        bool endTurn = Input.GetKey(KeyCode.Space);
         float leftSpeed = Input.GetKey(KeyCode.LeftArrow) ? -speed : 0;
         float rightSpeed = Input.GetKey(KeyCode.RightArrow) ? speed : 0;
 
@@ -62,7 +63,8 @@ public class Guy : MonoBehaviour
 
         float endPosition = transform.position.x;
         distanceMoved = Mathf.Abs(startPosition - endPosition);
-        if (distanceMoved >= maxDistance)
+
+        if (distanceMoved >= maxDistance || endTurn)
         {
             currentState = State.Acting;
         }

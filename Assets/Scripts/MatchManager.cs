@@ -22,7 +22,7 @@ public class MatchManager : MonoBehaviour
         
         if (neededSpawns > spawnPoints.Count)
         {
-            numGuys = 1; // reduce number of guys if we can't support it
+            numGuys = 1; // reduce number of guys if we can't support it on this map
         }
 
         CreatePlayers();
