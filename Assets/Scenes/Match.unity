@@ -505,6 +505,7 @@ MonoBehaviour:
   - {fileID: 406730825}
   - {fileID: 1110725736}
   - {fileID: 1013843014}
+  currentGuy: {fileID: 0}
   turn: 0
   currentPlayer: 0
 --- !u!4 &1412253503
