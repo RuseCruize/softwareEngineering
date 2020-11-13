@@ -63,7 +63,7 @@ public class Guy : MonoBehaviour
         {
             spriteRenderer.flipX = false;
         }
-        else
+        else if (leftSpeed != 0)
         {
             spriteRenderer.flipX = true;
         }
@@ -100,14 +100,18 @@ public class Guy : MonoBehaviour
         {
             case Weapon.WeaponType.Machete:
                 currentWeapon = GameObject.Instantiate(GameManager.STATE.Machete);
+                currentWeapon.transform.parent = transform;
+                currentWeapon.transform.position = transform.position + new Vector3(0.55f, -0.4f, 0);
                 break;
 
             case Weapon.WeaponType.Pistol:
                 currentWeapon = GameObject.Instantiate(GameManager.STATE.Pistol);
+                currentWeapon.transform.parent = transform;
+                currentWeapon.transform.position = transform.position + new Vector3(0.45f, -0.3f, 0);
                 break;
         }
 
-        currentWeapon.transform.parent = transform;
+        
     }
 
     public void Act()
