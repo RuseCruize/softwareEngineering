@@ -111,7 +111,6 @@ public class MatchManager : MonoBehaviour
         currentGuy = players[currentPlayer].GetGuy().GetComponent<Guy>();
         currentGuy.Activate();
         turn++;
-        advanceTurn = false;
     }
 
     void Update()
@@ -146,6 +145,7 @@ public class MatchManager : MonoBehaviour
                 case Guy.State.Waiting:
                     if (advanceTurn)
                     {
+                        advanceTurn = false;
                         NextTurn();
                     }
                     break;

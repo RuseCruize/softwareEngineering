@@ -48,10 +48,13 @@ public class Guy : MonoBehaviour
 
     public void Activate()
     {
-        startPosition = transform.position.x;
-        currentState = State.Moving;
-        currentWeaponType = GameManager.WeaponType.Unarmed;
-        currentWeapon = null;
+        if (currentState != State.Dead)
+        {
+            startPosition = transform.position.x;
+            currentState = State.Moving;
+            currentWeaponType = GameManager.WeaponType.Unarmed;
+            currentWeapon = null;
+        }
     }
 
     public void Move()
@@ -204,8 +207,10 @@ public class Guy : MonoBehaviour
                 GameObject damageFlash = GameObject.Instantiate(GameManager.STATE.MacheteFlash);
                 damageFlash.transform.position = currentWeapon.transform.position;
                 damageFlash.transform.rotation = currentWeapon.transform.rotation;
-                damageFlash.GetComponent<SpriteRenderer>().flipX = spriteRenderer.flipX;
-                damageFlash.transform.parent = transform;
+                if (spriteRenderer.flipX)
+                {
+                    damageFlash.transform.localScale = new Vector3(-10, 5, 5);
+                }
                 
                 break;
             case GameManager.WeaponType.Pistol:

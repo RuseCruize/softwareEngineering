@@ -36,8 +36,11 @@ public class WeaponDamage : MonoBehaviour
         {
             if (hitTag == "Guy")
             {
-                hitGuy.TakeDamage(GameManager.STATE.MacheteDamage);
-                Debug.Log("Damaged Guy.");
+                if (hitGuy.health > 0)
+                {
+                    hitGuy.TakeDamage(GameManager.STATE.MacheteDamage);
+                    Debug.Log("Damaged Guy.");
+                }
             }
             else
             {
