@@ -153,7 +153,6 @@ public class Guy : MonoBehaviour
         }
 
         lookAngle = Mathf.Atan2(target.y, guyCenter.x) * Mathf.Rad2Deg;
-        Debug.Log(lookAngle);
 
         if (currentWeapon.GetComponent<SpriteRenderer>().flipX)
         {
@@ -236,17 +235,31 @@ public class Guy : MonoBehaviour
         if (currentWeaponType != GameManager.WeaponType.Unarmed)
         {
             Gizmos.DrawLine(currentWeapon.transform.position, clickPoint);
-            Debug.Log(clickPoint);
         }
     }
 
     public void TakeDamage(int damage)
     {
+        StartCoroutine(Hurt());
+        
         health -= damage;
         if (health <= 0)
         {
             currentState = State.Dead;
             StartCoroutine(Disappear());
+        }
+    }
+
+    IEnumerator Hurt()
+    {
+        Color originalColor = spriteRenderer.color;
+        Color flashColor = new Color(255, 0, 0);
+        for (int i = 0; i < 3; i++)
+        {
+            spriteRenderer.color = flashColor;
+            yield return new WaitForSeconds(0.1f);
+            spriteRenderer.color = originalColor;
+            yield return new WaitForSeconds(0.1f);
         }
     }
 
