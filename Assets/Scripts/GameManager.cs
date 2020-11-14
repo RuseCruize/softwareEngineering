@@ -18,6 +18,7 @@ public class GameManager : MonoBehaviour
 
     public GameObject Machete;
     public GameObject Pistol;
+    public GameObject Bullet;
 
     // Singleton Pattern
     void Awake()

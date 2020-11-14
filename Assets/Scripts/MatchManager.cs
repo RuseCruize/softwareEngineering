@@ -116,15 +116,30 @@ public class MatchManager : MonoBehaviour
             switch(currentGuy.currentState)
             {
                 case Guy.State.Moving:
-                    currentGuy.Move();
+                    if (players[currentPlayer].isComputer)
+                    {
+                        currentGuy.MoveAI();
+                    }
+                    else
+                    {
+                        currentGuy.Move();
+                    }
                     break;
 
                 case Guy.State.Acting:
-                    currentGuy.Act();
+                    if (players[currentPlayer].isComputer)
+                    {
+                        currentGuy.ActAI();
+                    }
+                    else
+                    {
+                        currentGuy.Act();
+                    }
+                        
                     break;
 
                 case Guy.State.Waiting:
-                    this.NextTurn();
+                    NextTurn();
                     break;
 
                 case Guy.State.Dead:

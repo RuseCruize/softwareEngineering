@@ -87,6 +87,11 @@ public class Guy : MonoBehaviour
         }
     }
 
+    public void MoveAI()
+    {
+
+    }
+
     void SelectWeapon(Weapon.WeaponType weaponType)
     {
         if (currentWeapon != null)
@@ -158,7 +163,7 @@ public class Guy : MonoBehaviour
                 {
                     lookAngle = Mathf.Clamp(lookAngle, -180, -130);
                 }
-                Debug.Log(lookAngle);
+                
                 lookAngle = lookAngle + 180;
             }
             else
@@ -169,10 +174,46 @@ public class Guy : MonoBehaviour
         }
 
         // Use Weapon
-        if (Input.GetKeyDown(KeyCode.P))
+        if (Input.GetMouseButtonDown(0))
         {
+            Attack();
             SelectWeapon(Weapon.WeaponType.Unarmed);
             currentState = State.Waiting;
+        }
+    }
+
+    public void ActAI()
+    {
+
+    }
+
+    void Attack()
+    {
+        switch (currentWeaponType)
+        {
+            case Weapon.WeaponType.Machete:
+                RaycastHit2D[] targets = Physics2D.LinecastAll(currentWeapon.transform.position, currentWeapon.transform.rotation * Vector3.forward, (1 << 9));
+                for (int i = 0; i < targets.Length; i++)
+                {
+                    Guy targetGuy = targets[i].collider.GetComponent<Guy>();
+                    if (targetGuy.owner != this.owner)
+                    {
+                        Debug.Log("HIT");
+                    }
+                }
+                break;
+            case Weapon.WeaponType.Pistol:
+                
+                break;
+        }
+    }
+
+    void OnDrawGizmos()
+    {
+        if (currentWeaponType == Weapon.WeaponType.Machete)
+        {
+            Gizmos.DrawLine(currentWeapon.transform.position, currentWeapon.transform.position + new Vector3(10, 10, 10) + currentWeapon.transform.forward);
+            
         }
     }
 }
