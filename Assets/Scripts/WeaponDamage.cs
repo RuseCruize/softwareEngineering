@@ -23,6 +23,7 @@ public class WeaponDamage : MonoBehaviour
         }
 
         Destroy(gameObject);
+        GameObject.FindObjectOfType<MatchManager>().advanceTurn = true;
     }
 
     void OnTriggerEnter2D(Collider2D hit)

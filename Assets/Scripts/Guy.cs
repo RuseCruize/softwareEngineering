@@ -186,12 +186,6 @@ public class Guy : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             Attack();
-            // SelectWeapon(GameManager.WeaponType.Unarmed);
-            // currentState = State.Waiting;
-        }
-
-        if (Input.GetMouseButtonDown(1))
-        {
             SelectWeapon(GameManager.WeaponType.Unarmed);
             currentState = State.Waiting;
         }
@@ -247,7 +241,5 @@ public class Guy : MonoBehaviour
             spriteRenderer.material.color = newColor;
             yield return null;
         }
-
-        Destroy(gameObject);
     }
 }

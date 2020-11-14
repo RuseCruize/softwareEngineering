@@ -14,8 +14,11 @@ public class MatchManager : MonoBehaviour
     public int currentPlayer;
     bool started;
 
+    public bool advanceTurn;
+
     void Start()
     {
+        advanceTurn = false;
         started = false;
         numPlayers = GameManager.STATE.numPlayers;
         int neededSpawns = numGuys * numPlayers;
@@ -108,6 +111,7 @@ public class MatchManager : MonoBehaviour
         currentGuy = players[currentPlayer].GetGuy().GetComponent<Guy>();
         currentGuy.Activate();
         turn++;
+        advanceTurn = false;
     }
 
     void Update()
@@ -140,7 +144,10 @@ public class MatchManager : MonoBehaviour
                     break;
 
                 case Guy.State.Waiting:
-                    NextTurn();
+                    if (advanceTurn)
+                    {
+                        NextTurn();
+                    }
                     break;
 
                 case Guy.State.Dead:
