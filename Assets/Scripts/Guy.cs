@@ -110,40 +110,50 @@ public class Guy : MonoBehaviour
         {
             case GameManager.WeaponType.Machete:
                 currentWeapon = GameObject.Instantiate(GameManager.STATE.Machete);
-                currentWeapon.transform.parent = transform;
-                if (spriteRenderer.flipX)
-                {
-                    currentWeapon.transform.position = transform.position + new Vector3(-0.2f, -0.4f, 0);
-                    currentWeapon.GetComponent<SpriteRenderer>().flipX = true;
-                }
-                else
-                {
-                    currentWeapon.transform.position = transform.position + new Vector3(0.2f, -0.4f, 0);
-                }
                 break;
 
             case GameManager.WeaponType.Pistol:
                 currentWeapon = GameObject.Instantiate(GameManager.STATE.Pistol);
-                currentWeapon.transform.parent = transform;
-                if (spriteRenderer.flipX)
-                {
-                    currentWeapon.transform.position = transform.position + new Vector3(-0.2f, -0.45f, 0);
-                    currentWeapon.GetComponent<SpriteRenderer>().flipX = true;
-                }
-                else
-                {
-                    currentWeapon.transform.position = transform.position + new Vector3(0.2f, -0.45f, 0);
-                }
                 break;
         }
 
-        
+        currentWeapon.transform.parent = transform;
     }
 
     public void Aim(Vector3 target)
     {
-        Debug.Log(target.x - currentWeapon.transform.position.x);
-        lookAngle = Mathf.Atan2(target.y, target.x) * Mathf.Rad2Deg;
+        Vector3 guyCenter = target + currentWeapon.transform.position - transform.position;
+        if (guyCenter.x >= 0)
+        {
+            currentWeapon.GetComponent<SpriteRenderer>().flipX = false;
+            spriteRenderer.flipX = false;
+
+            if (currentWeaponType == GameManager.WeaponType.Machete)
+            {
+                currentWeapon.transform.position = transform.position + new Vector3(0.2f, -0.4f, 0);
+            }
+            else if (currentWeaponType == GameManager.WeaponType.Pistol)
+            {
+                currentWeapon.transform.position = transform.position + new Vector3(0.2f, -0.4f, 0);
+            }
+        }
+        else
+        {
+            currentWeapon.GetComponent<SpriteRenderer>().flipX = true;
+            spriteRenderer.flipX = true;
+
+            if (currentWeaponType == GameManager.WeaponType.Machete)
+            {
+                currentWeapon.transform.position = transform.position + new Vector3(-0.2f, -0.45f, 0);
+            }
+            else if (currentWeaponType == GameManager.WeaponType.Pistol)
+            {
+                currentWeapon.transform.position = transform.position + new Vector3(-0.2f, -0.45f, 0);
+            }
+        }
+
+        lookAngle = Mathf.Atan2(target.y, guyCenter.x) * Mathf.Rad2Deg;
+        Debug.Log(lookAngle);
 
         if (currentWeapon.GetComponent<SpriteRenderer>().flipX)
         {

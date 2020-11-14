@@ -35,8 +35,13 @@ public class Player
     public void SpawnGuy(Vector3 position)
     {
         GameObject guy = GameObject.Instantiate(GameManager.STATE.guyPrefab, position, Quaternion.identity);
-        guy.GetComponent<Guy>().owner = playerName;
+        Guy guyScript = guy.GetComponent<Guy>();
+        guyScript.owner = playerName;
         guy.tag = "Guy";
+        if (guy.transform.position.x > 0)
+        {
+            guyScript.spriteRenderer.flipX = true;
+        }
         guys.Add(guy);
     }
 
