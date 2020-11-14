@@ -4,10 +4,5 @@ using UnityEngine;
 
 public class Weapon : MonoBehaviour
 {
-    public enum WeaponType
-    {
-        Unarmed,
-        Machete,
-        Pistol
-    }
+    
 }

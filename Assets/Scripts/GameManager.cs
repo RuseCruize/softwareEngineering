@@ -20,6 +20,13 @@ public class GameManager : MonoBehaviour
     public GameObject Pistol;
     public GameObject Bullet;
 
+    public enum WeaponType
+    {
+        Unarmed,
+        Machete,
+        Pistol
+    }
+
     // Singleton Pattern
     void Awake()
     {

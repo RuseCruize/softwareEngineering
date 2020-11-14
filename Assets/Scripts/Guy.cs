@@ -17,7 +17,7 @@ public class Guy : MonoBehaviour
     }
 
     public State currentState;
-    public Weapon.WeaponType currentWeaponType;
+    public GameManager.WeaponType currentWeaponType;
     public GameObject currentWeapon;
 
     public float speed;
@@ -48,7 +48,7 @@ public class Guy : MonoBehaviour
     {
         startPosition = transform.position.x;
         currentState = State.Moving;
-        currentWeaponType = Weapon.WeaponType.Unarmed;
+        currentWeaponType = GameManager.WeaponType.Unarmed;
         currentWeapon = null;
     }
 
@@ -92,7 +92,7 @@ public class Guy : MonoBehaviour
 
     }
 
-    void SelectWeapon(Weapon.WeaponType weaponType)
+    void SelectWeapon(GameManager.WeaponType weaponType)
     {
         if (currentWeapon != null)
         {
@@ -103,7 +103,7 @@ public class Guy : MonoBehaviour
 
         switch (weaponType)
         {
-            case Weapon.WeaponType.Machete:
+            case GameManager.WeaponType.Machete:
                 currentWeapon = GameObject.Instantiate(GameManager.STATE.Machete);
                 currentWeapon.transform.parent = transform;
                 if (spriteRenderer.flipX)
@@ -117,7 +117,7 @@ public class Guy : MonoBehaviour
                 }
                 break;
 
-            case Weapon.WeaponType.Pistol:
+            case GameManager.WeaponType.Pistol:
                 currentWeapon = GameObject.Instantiate(GameManager.STATE.Pistol);
                 currentWeapon.transform.parent = transform;
                 if (spriteRenderer.flipX)
@@ -135,49 +135,57 @@ public class Guy : MonoBehaviour
         
     }
 
+    public float Aim(Vector3 target)
+    {
+        float lookAngle = Mathf.Atan2(target.y, target.x) * Mathf.Rad2Deg;
+
+        if (currentWeapon.GetComponent<SpriteRenderer>().flipX)
+        {
+            if (lookAngle > 90)
+            {
+                lookAngle = Mathf.Clamp(lookAngle, 130, 180);
+            }
+            else
+            {
+                lookAngle = Mathf.Clamp(lookAngle, -180, -130);
+            }
+
+            lookAngle = lookAngle + 180;
+        }
+        else
+        {
+            lookAngle = Mathf.Clamp(lookAngle, -50f, 50f);
+        }
+
+        currentWeapon.transform.rotation = Quaternion.Euler(0f, 0f, lookAngle);
+
+        return lookAngle;
+    }
+
     public void Act()
     {
         // Select Weapon
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            SelectWeapon(Weapon.WeaponType.Machete);
+            SelectWeapon(GameManager.WeaponType.Machete);
         }
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
-            SelectWeapon(Weapon.WeaponType.Pistol);
+            SelectWeapon(GameManager.WeaponType.Pistol);
         }
 
         // Aim Weapon
         if (currentWeapon != null)
         {
             Vector3 lookDirection = Camera.main.ScreenToWorldPoint(Input.mousePosition) - currentWeapon.transform.position;
-            float lookAngle = Mathf.Atan2(lookDirection.y, lookDirection.x) * Mathf.Rad2Deg;
-
-            if (currentWeapon.GetComponent<SpriteRenderer>().flipX)
-            {
-                if (lookAngle > 90)
-                {
-                    lookAngle = Mathf.Clamp(lookAngle, 130, 180);
-                }
-                else
-                {
-                    lookAngle = Mathf.Clamp(lookAngle, -180, -130);
-                }
-                
-                lookAngle = lookAngle + 180;
-            }
-            else
-            {
-                lookAngle = Mathf.Clamp(lookAngle, -50f, 50f);
-            }
-            currentWeapon.transform.rotation = Quaternion.Euler(0f, 0f, lookAngle);
+            Aim(lookDirection);
         }
 
         // Use Weapon
         if (Input.GetMouseButtonDown(0))
         {
             Attack();
-            SelectWeapon(Weapon.WeaponType.Unarmed);
+            SelectWeapon(GameManager.WeaponType.Unarmed);
             currentState = State.Waiting;
         }
     }
@@ -191,7 +199,7 @@ public class Guy : MonoBehaviour
     {
         switch (currentWeaponType)
         {
-            case Weapon.WeaponType.Machete:
+            case GameManager.WeaponType.Machete:
                 RaycastHit2D[] targets = Physics2D.LinecastAll(currentWeapon.transform.position, currentWeapon.transform.rotation * Vector3.forward, (1 << 9));
                 for (int i = 0; i < targets.Length; i++)
                 {
@@ -202,7 +210,7 @@ public class Guy : MonoBehaviour
                     }
                 }
                 break;
-            case Weapon.WeaponType.Pistol:
+            case GameManager.WeaponType.Pistol:
                 
                 break;
         }
@@ -210,7 +218,7 @@ public class Guy : MonoBehaviour
 
     void OnDrawGizmos()
     {
-        if (currentWeaponType == Weapon.WeaponType.Machete)
+        if (currentWeaponType == GameManager.WeaponType.Machete)
         {
             Gizmos.DrawLine(currentWeapon.transform.position, currentWeapon.transform.position + new Vector3(10, 10, 10) + currentWeapon.transform.forward);
             
