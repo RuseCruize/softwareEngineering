@@ -36,9 +36,9 @@ public class MatchManager : MonoBehaviour
         players = new Player[numPlayers];
         players[0] = new Player("Player 1", numGuys, 0); // human
 
-        for (int i = 0; i < numPlayers; i++)
+        for (int i = 1; i < numPlayers; i++)
         {
-            players[i] = new Player("Player " + i, numGuys, GameManager.STATE.computerLevel); // potentially AI
+            players[i] = new Player("Player " + (i + 1), numGuys, GameManager.STATE.computerLevel); // potentially AI
         }
     }
 
@@ -107,6 +107,7 @@ public class MatchManager : MonoBehaviour
         players[currentPlayer].NextGuy();
         currentGuy = players[currentPlayer].GetGuy().GetComponent<Guy>();
         currentGuy.Activate();
+        turn++;
     }
 
     void Update()
@@ -144,6 +145,7 @@ public class MatchManager : MonoBehaviour
 
                 case Guy.State.Dead:
                     Debug.Log("DEAD");
+                    NextTurn();
                     break;
             }
         }

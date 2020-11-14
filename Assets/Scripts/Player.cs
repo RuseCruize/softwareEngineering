@@ -21,11 +21,11 @@ public class Player
 
         if (computerLevel > 0)
         {
-            this.isComputer = true;
+            isComputer = true;
         }
         else
         {
-            this.isComputer = false;
+            isComputer = false;
         }
 
         guys = new List<GameObject>();
@@ -34,8 +34,10 @@ public class Player
 
     public void SpawnGuy(Vector3 position)
     {
-        Debug.Log(playerName + ": Creating Guy at " + position.ToString());
+        Debug.Log(playerName);
         GameObject guy = GameObject.Instantiate(GameManager.STATE.guyPrefab, position, Quaternion.identity);
+        guy.GetComponent<Guy>().owner = playerName;
+        guy.tag = "Guy";
         guys.Add(guy);
     }
 
