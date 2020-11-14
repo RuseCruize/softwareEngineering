@@ -142,6 +142,7 @@ public class Guy : MonoBehaviour
 
     public void Aim(Vector3 target)
     {
+        Debug.Log(target.x - currentWeapon.transform.position.x);
         lookAngle = Mathf.Atan2(target.y, target.x) * Mathf.Rad2Deg;
 
         if (currentWeapon.GetComponent<SpriteRenderer>().flipX)
@@ -181,6 +182,7 @@ public class Guy : MonoBehaviour
         if (currentWeapon != null)
         {
             clickPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            clickPoint.z = 0;
             Vector3 lookDirection = clickPoint - currentWeapon.transform.position;
             Aim(lookDirection);
         }
@@ -224,6 +226,7 @@ public class Guy : MonoBehaviour
         if (currentWeaponType != GameManager.WeaponType.Unarmed)
         {
             Gizmos.DrawLine(currentWeapon.transform.position, clickPoint);
+            Debug.Log(clickPoint);
         }
     }
 

@@ -34,7 +34,6 @@ public class Player
 
     public void SpawnGuy(Vector3 position)
     {
-        Debug.Log(playerName);
         GameObject guy = GameObject.Instantiate(GameManager.STATE.guyPrefab, position, Quaternion.identity);
         guy.GetComponent<Guy>().owner = playerName;
         guy.tag = "Guy";
