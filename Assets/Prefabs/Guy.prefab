@@ -117,12 +117,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb682df0afa607d4096470864e01f3ba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  startPosition: 0
+  currentState: 0
+  currentWeapon: 0
   speed: 3
   jumpVelocity: 7
+  distanceMoved: 0
   body: {fileID: 2416442037948885646}
   groundLayer:
     serializedVersion: 2
     m_Bits: 256
+  spriteRenderer: {fileID: 8448412191553915651}
   health: 100
   owner: 
 --- !u!70 &4226638360911194742

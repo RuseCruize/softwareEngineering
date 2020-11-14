@@ -16,6 +16,10 @@ public class GameManager : MonoBehaviour
 
     public GameObject guyPrefab;
 
+    public GameObject Machete;
+    public GameObject Pistol;
+    public GameObject Bullet;
+
     // Singleton Pattern
     void Awake()
     {

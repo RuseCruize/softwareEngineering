@@ -17,6 +17,8 @@ public class Guy : MonoBehaviour
     }
 
     public State currentState;
+    public Weapon.WeaponType currentWeaponType;
+    public GameObject currentWeapon;
 
     public float speed;
     public float jumpVelocity;
@@ -24,6 +26,7 @@ public class Guy : MonoBehaviour
 
     public Rigidbody2D body;
     public LayerMask groundLayer;
+    public SpriteRenderer spriteRenderer;
 
     public int health;
     public string owner;
@@ -31,7 +34,8 @@ public class Guy : MonoBehaviour
     public Guy(Vector3 position, string owner)
     {
         this.owner = owner;
-        this.health = 100;
+        health = 100;
+        currentState = State.Waiting;
     }
 
     bool isGrounded()
@@ -43,13 +47,27 @@ public class Guy : MonoBehaviour
     public void Activate()
     {
         startPosition = transform.position.x;
+        currentState = State.Moving;
+        currentWeaponType = Weapon.WeaponType.Unarmed;
+        currentWeapon = null;
     }
 
     public void Move()
     {
         bool isUp = Input.GetKey(KeyCode.UpArrow);
+        bool endTurn = Input.GetKey(KeyCode.Space);
         float leftSpeed = Input.GetKey(KeyCode.LeftArrow) ? -speed : 0;
         float rightSpeed = Input.GetKey(KeyCode.RightArrow) ? speed : 0;
+
+        if (rightSpeed != 0)
+        {
+            spriteRenderer.flipX = false;
+        }
+        else if (leftSpeed != 0)
+        {
+            spriteRenderer.flipX = true;
+        }
+
 
         if (this.isGrounded() && isUp)
         {
@@ -62,17 +80,140 @@ public class Guy : MonoBehaviour
 
         float endPosition = transform.position.x;
         distanceMoved = Mathf.Abs(startPosition - endPosition);
-        if (distanceMoved >= maxDistance)
+
+        if (distanceMoved >= maxDistance || endTurn)
         {
             currentState = State.Acting;
         }
     }
 
+    public void MoveAI()
+    {
+
+    }
+
+    void SelectWeapon(Weapon.WeaponType weaponType)
+    {
+        if (currentWeapon != null)
+        {
+            GameObject.Destroy(currentWeapon);
+        }
+
+        currentWeaponType = weaponType;
+
+        switch (weaponType)
+        {
+            case Weapon.WeaponType.Machete:
+                currentWeapon = GameObject.Instantiate(GameManager.STATE.Machete);
+                currentWeapon.transform.parent = transform;
+                if (spriteRenderer.flipX)
+                {
+                    currentWeapon.transform.position = transform.position + new Vector3(-0.2f, -0.4f, 0);
+                    currentWeapon.GetComponent<SpriteRenderer>().flipX = true;
+                }
+                else
+                {
+                    currentWeapon.transform.position = transform.position + new Vector3(0.2f, -0.4f, 0);
+                }
+                break;
+
+            case Weapon.WeaponType.Pistol:
+                currentWeapon = GameObject.Instantiate(GameManager.STATE.Pistol);
+                currentWeapon.transform.parent = transform;
+                if (spriteRenderer.flipX)
+                {
+                    currentWeapon.transform.position = transform.position + new Vector3(-0.2f, -0.45f, 0);
+                    currentWeapon.GetComponent<SpriteRenderer>().flipX = true;
+                }
+                else
+                {
+                    currentWeapon.transform.position = transform.position + new Vector3(0.2f, -0.45f, 0);
+                }
+                break;
+        }
+
+        
+    }
+
     public void Act()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        // Select Weapon
+        if (Input.GetKeyDown(KeyCode.Alpha1))
         {
+            SelectWeapon(Weapon.WeaponType.Machete);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            SelectWeapon(Weapon.WeaponType.Pistol);
+        }
+
+        // Aim Weapon
+        if (currentWeapon != null)
+        {
+            Vector3 lookDirection = Camera.main.ScreenToWorldPoint(Input.mousePosition) - currentWeapon.transform.position;
+            float lookAngle = Mathf.Atan2(lookDirection.y, lookDirection.x) * Mathf.Rad2Deg;
+
+            if (currentWeapon.GetComponent<SpriteRenderer>().flipX)
+            {
+                if (lookAngle > 90)
+                {
+                    lookAngle = Mathf.Clamp(lookAngle, 130, 180);
+                }
+                else
+                {
+                    lookAngle = Mathf.Clamp(lookAngle, -180, -130);
+                }
+                
+                lookAngle = lookAngle + 180;
+            }
+            else
+            {
+                lookAngle = Mathf.Clamp(lookAngle, -50f, 50f);
+            }
+            currentWeapon.transform.rotation = Quaternion.Euler(0f, 0f, lookAngle);
+        }
+
+        // Use Weapon
+        if (Input.GetMouseButtonDown(0))
+        {
+            Attack();
+            SelectWeapon(Weapon.WeaponType.Unarmed);
             currentState = State.Waiting;
+        }
+    }
+
+    public void ActAI()
+    {
+
+    }
+
+    void Attack()
+    {
+        switch (currentWeaponType)
+        {
+            case Weapon.WeaponType.Machete:
+                RaycastHit2D[] targets = Physics2D.LinecastAll(currentWeapon.transform.position, currentWeapon.transform.rotation * Vector3.forward, (1 << 9));
+                for (int i = 0; i < targets.Length; i++)
+                {
+                    Guy targetGuy = targets[i].collider.GetComponent<Guy>();
+                    if (targetGuy.owner != this.owner)
+                    {
+                        Debug.Log("HIT");
+                    }
+                }
+                break;
+            case Weapon.WeaponType.Pistol:
+                
+                break;
+        }
+    }
+
+    void OnDrawGizmos()
+    {
+        if (currentWeaponType == Weapon.WeaponType.Machete)
+        {
+            Gizmos.DrawLine(currentWeapon.transform.position, currentWeapon.transform.position + new Vector3(10, 10, 10) + currentWeapon.transform.forward);
+            
         }
     }
 }
