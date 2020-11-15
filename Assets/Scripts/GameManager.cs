@@ -19,6 +19,10 @@ public class GameManager : MonoBehaviour
     public GameObject Machete;
     public GameObject Pistol;
     public GameObject Bullet;
+    public GameObject MacheteFlash;
+
+    public int MacheteDamage;
+    public int BulletDamage;
 
     public enum WeaponType
     {
@@ -30,7 +34,7 @@ public class GameManager : MonoBehaviour
     // Singleton Pattern
     void Awake()
     {
-        if (STATE != null)
+        if (STATE != null && STATE != this)
             GameObject.Destroy(STATE);
         else
             STATE = this;
