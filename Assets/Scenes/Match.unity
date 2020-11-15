@@ -792,10 +792,11 @@ MonoBehaviour:
     type: 3}
   Machete: {fileID: 7341030032883109013, guid: bc69f335bb8f556408ae18af04ea4d25, type: 3}
   Pistol: {fileID: 8128183627871596112, guid: 133ea832167e4b243bd6195798ff2822, type: 3}
-  Bullet: {fileID: 0}
-  MacheteFlash: {fileID: 0}
-  MacheteDamage: 0
-  BulletDamage: 0
+  Bullet: {fileID: 1012665040539356477, guid: 6523b7a56d45b4c4b8b6f70be6028fd1, type: 3}
+  MacheteFlash: {fileID: 396138105777707092, guid: 59cde4f5c2bba5e49bd680fb98bcbb52,
+    type: 3}
+  MacheteDamage: 25
+  BulletDamage: 20
 --- !u!4 &897225396
 Transform:
   m_ObjectHideFlags: 0
