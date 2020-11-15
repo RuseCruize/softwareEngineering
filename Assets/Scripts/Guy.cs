@@ -33,6 +33,9 @@ public class Guy : MonoBehaviour
     public int health;
     public string owner;
 
+    // Only used by AI
+    public NavNode currentNode;
+
     public Guy(Vector3 position, string owner)
     {
         this.owner = owner;
@@ -74,7 +77,7 @@ public class Guy : MonoBehaviour
         }
 
 
-        if (this.isGrounded() && isUp)
+        if (isGrounded() && isUp)
         {
             // Jump logic, check to see if touching ground
             body.velocity = Vector2.up * jumpVelocity;
