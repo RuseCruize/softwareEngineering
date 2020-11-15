@@ -464,6 +464,7 @@ public class Guy : MonoBehaviour
         health -= damage;
         if (health <= 0)
         {
+            health = 0;
             currentState = State.Dead;
             StartCoroutine(Disappear());
         }
