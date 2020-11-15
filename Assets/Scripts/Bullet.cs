@@ -51,6 +51,10 @@ public class Bullet : MonoBehaviour
             {
                 Debug.Log("Ignore self");
             }
+            else if (guy.currentState == Guy.State.Dead)
+            {
+                Debug.Log("Ignore dead");
+            }
             else
             {
                 Debug.Log(matchManager.players[matchManager.currentPlayer].playerName);
