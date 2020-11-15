@@ -225,7 +225,15 @@ public class Guy : MonoBehaviour
                 
                 break;
             case GameManager.WeaponType.Pistol:
-                currentWeapon.transform.position += currentWeapon.transform.forward;
+                GameObject bullet = GameObject.Instantiate(GameManager.STATE.Bullet);
+                Bullet bulletScript = bullet.GetComponent<Bullet>();
+                bullet.transform.position = currentWeapon.transform.position;
+                bullet.transform.rotation = currentWeapon.transform.rotation;
+                if (spriteRenderer.flipX)
+                {
+                    bulletScript.flipped = true;
+                    bullet.transform.localScale = new Vector3(-1.5f, 1, 1);
+                }
                 break;
         }
     }

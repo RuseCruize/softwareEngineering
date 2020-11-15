@@ -40,6 +40,8 @@ public class WeaponDamage : MonoBehaviour
                 {
                     hitGuy.TakeDamage(GameManager.STATE.MacheteDamage);
                     Debug.Log("Damaged Guy.");
+                    Debug.Log(matchManager.players[matchManager.currentPlayer].playerName);
+                    Debug.Log(hitGuy.owner);
                 }
             }
             else

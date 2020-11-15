@@ -37,7 +37,6 @@ public class Player
         GameObject guy = GameObject.Instantiate(GameManager.STATE.guyPrefab, position, Quaternion.identity);
         Guy guyScript = guy.GetComponent<Guy>();
         guyScript.owner = playerName;
-        guy.tag = "Guy";
         if (guy.transform.position.x > 0)
         {
             guyScript.spriteRenderer.flipX = true;
