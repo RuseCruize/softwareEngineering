@@ -34,7 +34,7 @@ public class GameManager : MonoBehaviour
     // Singleton Pattern
     void Awake()
     {
-        if (STATE != null)
+        if (STATE != null && STATE != this)
             GameObject.Destroy(STATE);
         else
             STATE = this;
