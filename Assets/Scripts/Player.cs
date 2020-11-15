@@ -32,11 +32,15 @@ public class Player
         currentGuy = 0;
     }
 
-    public void SpawnGuy(Vector3 position)
+    public void SpawnGuy(GameObject spawnPoint)
     {
+        Vector3 position = spawnPoint.transform.position;
+        NavNode node = spawnPoint.GetComponent<NavNode>();
+
         GameObject guy = GameObject.Instantiate(GameManager.STATE.guyPrefab, position, Quaternion.identity);
         Guy guyScript = guy.GetComponent<Guy>();
         guyScript.owner = playerName;
+        guyScript.currentNode = node;
         if (guy.transform.position.x > 0)
         {
             guyScript.spriteRenderer.flipX = true;

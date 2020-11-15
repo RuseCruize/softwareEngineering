@@ -34,8 +34,9 @@ public class Guy : MonoBehaviour
     public float health;
     public string owner;
 
-    //[SerializeField] HealthBar healthBar;
-
+    // Only used by AI
+    public NavNode currentNode;
+    public int nextNodeIndex;
 
     public Guy(Vector3 position, string owner)
     {
@@ -58,6 +59,7 @@ public class Guy : MonoBehaviour
             currentState = State.Moving;
             currentWeaponType = GameManager.WeaponType.Unarmed;
             currentWeapon = null;
+            nextNodeIndex = -100;
         }
     }
 
@@ -78,7 +80,7 @@ public class Guy : MonoBehaviour
         }
 
 
-        if (this.isGrounded() && isUp)
+        if (isGrounded() && isUp)
         {
             // Jump logic, check to see if touching ground
             body.velocity = Vector2.up * jumpVelocity;
@@ -96,9 +98,177 @@ public class Guy : MonoBehaviour
         }
     }
 
+    List<Guy> GetVisibleEnemies()
+    {
+        List<Guy> visibleGuys = new List<Guy>();
+        MatchManager matchManager = FindObjectOfType<MatchManager>();
+        Guy guy;
+        RaycastHit2D[] hits;
+
+        for (int i = 0; i < matchManager.players.Length; i++)
+        {
+            if (matchManager.players[matchManager.currentPlayer] != matchManager.players[i])
+            {
+                for (int j = 0; j < matchManager.players[i].guys.Count; j++)
+                {
+                    guy = matchManager.players[i].guys[j].GetComponent<Guy>();
+                    hits = Physics2D.LinecastAll(transform.position, guy.transform.position);
+                    Debug.DrawLine(transform.position, guy.transform.position, Color.red, 0.5f);
+                    bool hitWall = false;
+                    foreach (RaycastHit2D hit in hits)
+                    {
+                        if (hit.collider.gameObject.tag != "Guy")
+                        {
+                            hitWall = true;
+                            break;
+                        }
+                    }
+
+                    if (!hitWall)
+                    {
+                        visibleGuys.Add(guy);
+                    }
+                }
+            }
+        }
+
+        return visibleGuys;
+    }
+
+    List<Guy> GetEnemies()
+    {
+        List<Guy> enemies = new List<Guy>();
+        MatchManager matchManager = FindObjectOfType<MatchManager>();
+
+        for (int i = 0; i < matchManager.players.Length; i++)
+        {
+            if (matchManager.players[matchManager.currentPlayer] != matchManager.players[i])
+            {
+                foreach (GameObject guy in matchManager.players[matchManager.currentPlayer].guys)
+                {
+                    enemies.Add(guy.GetComponent<Guy>());
+                }
+            }
+        }
+
+        return enemies;
+    }
+
+    void FindNextNearestNode(Vector3 target)
+    {
+        for (int i = 0; i < currentNode.adjacentNodes.Count; i++)
+        {
+            NavNode node = currentNode.adjacentNodes[i];
+            if (Vector3.Distance(node.transform.position, target) < Vector3.Distance(currentNode.adjacentNodes[nextNodeIndex].transform.position, target))
+            {
+                nextNodeIndex = i;
+            }
+        }
+    }
+
+    void ChooseNextNode()
+    {
+        List<Guy> visibleGuys;
+
+        switch (GameManager.STATE.computerLevel)
+        {
+            case 1:
+                visibleGuys = GetVisibleEnemies();
+                if (visibleGuys.Count > 0)
+                {
+                    Debug.Log("EZ: See an enemy, staying put. They are at " + visibleGuys[0].gameObject.transform.position + ". See num: " + visibleGuys.Count);
+                    nextNodeIndex = -1;
+                }
+                else
+                {
+                    Debug.Log("EZ: See no enemies, moving to first adjacent point: " + currentNode.adjacentNodes[0]);
+                    nextNodeIndex = 0;
+                }
+                break;
+
+            case 2:
+                visibleGuys = GetVisibleEnemies();
+                if (visibleGuys.Count > 0)
+                {
+                    Guy target = visibleGuys[0];
+                    foreach (Guy guy in visibleGuys)
+                    {   
+                        if (guy.health < target.health)
+                        {
+                            target = guy;
+                        }
+                    }
+
+                    if (target.health <= GameManager.STATE.BulletDamage)
+                    {
+                        nextNodeIndex = -1;
+                    }
+                    else if (target.health <= GameManager.STATE.MacheteDamage)
+                    {
+                        FindNextNearestNode(target.transform.position);
+                    }
+                }
+                else
+                {
+                    Debug.Log("HARD: See no enemies, moving towards lowest health enemy.");
+                    Guy target = null;
+                    foreach (Guy enemy in GetEnemies()) {
+                        if (target == null)
+                        {
+                            target = enemy;
+                        }
+
+                        if (enemy.health < target.health)
+                        {
+                            target = enemy;
+                        }
+                    }
+                    FindNextNearestNode(target.transform.position);
+                    Debug.Log("Moving to " + currentNode.adjacentNodes[nextNodeIndex].gameObject.name);
+                }
+                break;
+        }
+    }
+
     public void MoveAI()
     {
+        if (nextNodeIndex == -100)
+        {
+            Debug.Log("Choosing next position...");
+            ChooseNextNode();
+        }
 
+        if (nextNodeIndex == -1 || Mathf.Abs(transform.position.x - currentNode.adjacentNodes[nextNodeIndex].transform.position.x) < 0.01f)
+        {
+            
+            if (nextNodeIndex >= 0)
+            {
+                Debug.Log(transform.position.x - currentNode.adjacentNodes[nextNodeIndex].transform.position.x);
+                Debug.Log("Reached destination " + currentNode.adjacentNodes[nextNodeIndex].gameObject.name);
+                currentNode = currentNode.adjacentNodes[nextNodeIndex];
+            }
+
+            nextNodeIndex = -100;
+            currentState = State.Acting;
+        }
+        else
+        {
+            NavNode targetNode = currentNode.adjacentNodes[nextNodeIndex];
+            if (isGrounded() && currentNode.shouldJump[nextNodeIndex])
+            {
+                // Jump logic, check to see if touching ground
+                body.velocity = Vector2.up * jumpVelocity;
+            }
+            if (targetNode.transform.position.x > transform.position.x)
+            {
+                transform.position += transform.right * speed * Time.deltaTime;
+            }
+            else
+            {
+                transform.position -= transform.right * speed * Time.deltaTime;
+            }
+        }
+        
     }
 
     void SelectWeapon(GameManager.WeaponType weaponType)
@@ -211,7 +381,44 @@ public class Guy : MonoBehaviour
 
     public void ActAI()
     {
+        List<Guy> visibleGuys = GetVisibleEnemies();
+        Guy target = null;
 
+        switch (GameManager.STATE.computerLevel)
+        {
+            case 1:
+                if (visibleGuys.Count > 0)
+                {
+                    target = visibleGuys[0];
+                }
+                break;
+
+            case 2:
+                if (visibleGuys.Count > 0)
+                {
+                    target = visibleGuys[0];
+                }
+                break;
+        }
+
+        if (target != null)
+        {
+            SelectWeapon(GameManager.WeaponType.Pistol);
+            Debug.Log("Aiming at " + target.transform.position);
+            Aim(target.transform.position);
+            Debug.DrawLine(currentWeapon.transform.position, target.transform.position, Color.green, 10f);
+            Attack();
+        }
+        else
+        {
+            SelectWeapon(GameManager.WeaponType.Machete);
+            Debug.Log("No one to attack, so aiming at self at " + transform.position);
+            Aim(transform.position);
+            Attack();
+        }
+
+        SelectWeapon(GameManager.WeaponType.Unarmed);
+        currentState = State.Waiting;
     }
 
     void Attack()
