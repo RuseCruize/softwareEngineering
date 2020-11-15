@@ -7,6 +7,7 @@ public class MatchManager : MonoBehaviour
     public int numGuys;
     private int numPlayers;
     public List<GameObject> spawnPoints;
+    public NavNode[] navNodes;
     public Guy currentGuy;
 
     public int turn;
@@ -31,6 +32,7 @@ public class MatchManager : MonoBehaviour
         CreatePlayers();
         SpawnGuys();
         StartGame();
+        navNodes = FindObjectsOfType<NavNode>();
         started = true;
     }
 
@@ -53,23 +55,23 @@ public class MatchManager : MonoBehaviour
         {
             if (numGuys == 1)
             {
-                players[0].SpawnGuy(spawnPoints[0].transform.position);
-                players[1].SpawnGuy(spawnPoints[3].transform.position);
+                players[0].SpawnGuy(spawnPoints[0]);
+                players[1].SpawnGuy(spawnPoints[3]);
             }
             else
             {
-                players[0].SpawnGuy(spawnPoints[0].transform.position);
-                players[0].SpawnGuy(spawnPoints[1].transform.position);
-                players[1].SpawnGuy(spawnPoints[2].transform.position);
-                players[1].SpawnGuy(spawnPoints[3].transform.position);
+                players[0].SpawnGuy(spawnPoints[0]);
+                players[0].SpawnGuy(spawnPoints[1]);
+                players[1].SpawnGuy(spawnPoints[2]);
+                players[1].SpawnGuy(spawnPoints[3]);
             }
         }
         else
         {
-            players[0].SpawnGuy(spawnPoints[0].transform.position);
-            players[1].SpawnGuy(spawnPoints[1].transform.position);
-            players[2].SpawnGuy(spawnPoints[2].transform.position);
-            players[3].SpawnGuy(spawnPoints[3].transform.position);
+            players[0].SpawnGuy(spawnPoints[0]);
+            players[1].SpawnGuy(spawnPoints[1]);
+            players[2].SpawnGuy(spawnPoints[2]);
+            players[3].SpawnGuy(spawnPoints[3]);
         }
     }
 
@@ -81,15 +83,19 @@ public class MatchManager : MonoBehaviour
         bool hasGuy = false;
         for (int i = 0; i < numPlayers; i++)
         {
-            if (players[i].guys.Count > 0)
+            for (int j = 0; j < players[i].guys.Count; j++)
             {
-                if (hasGuy)
+                if (players[i].guys[j].GetComponent<Guy>().currentState != Guy.State.Dead)
                 {
-                    return true;
-                }
-                else
-                {
-                    hasGuy = true;
+                    if (hasGuy)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        hasGuy = true;
+                        break;
+                    }
                 }
             }
         }
