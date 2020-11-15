@@ -403,12 +403,15 @@ public class Guy : MonoBehaviour
         if (target != null)
         {
             SelectWeapon(GameManager.WeaponType.Pistol);
+            Debug.Log("Aiming at " + target.transform.position);
             Aim(target.transform.position);
+            Debug.DrawLine(currentWeapon.transform.position, target.transform.position, Color.green, 10f);
             Attack();
         }
         else
         {
             SelectWeapon(GameManager.WeaponType.Machete);
+            Debug.Log("No one to attack, so aiming at self at " + transform.position);
             Aim(transform.position);
             Attack();
         }

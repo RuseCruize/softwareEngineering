@@ -83,15 +83,19 @@ public class MatchManager : MonoBehaviour
         bool hasGuy = false;
         for (int i = 0; i < numPlayers; i++)
         {
-            if (players[i].guys.Count > 0)
+            for (int j = 0; j < players[i].guys.Count; j++)
             {
-                if (hasGuy)
+                if (players[i].guys[j].GetComponent<Guy>().currentState != Guy.State.Dead)
                 {
-                    return true;
-                }
-                else
-                {
-                    hasGuy = true;
+                    if (hasGuy)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        hasGuy = true;
+                        break;
+                    }
                 }
             }
         }
