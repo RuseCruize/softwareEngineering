@@ -23,5 +23,6 @@ public class HealthHandler : MonoBehaviour
        healthBar.transform.position = guy.transform.position + new Vector3(0.0f, 1.2f, 0.0f);
        float currentHealth = (float)(guy.health / guy.maxHealth);
        healthBar.SetSize(currentHealth);
+        //HELLO
     }
 }
