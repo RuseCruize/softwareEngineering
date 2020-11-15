@@ -30,7 +30,8 @@ public class Guy : MonoBehaviour
     public LayerMask groundLayer;
     public SpriteRenderer spriteRenderer;
 
-    public int health;
+    public float maxHealth;
+    public float health;
     public string owner;
 
     // Only used by AI
@@ -463,6 +464,7 @@ public class Guy : MonoBehaviour
         health -= damage;
         if (health <= 0)
         {
+            health = 0;
             currentState = State.Dead;
             StartCoroutine(Disappear());
         }

@@ -6,7 +6,7 @@ public class en_shooting : MonoBehaviour
 {
 
     public GameObject pivot;
-    public GameObject cat;
+    public GameObject guy;
     public float lookSpeed = 50f;
     //public FindClosest nearGuy;
 
@@ -17,7 +17,7 @@ public class en_shooting : MonoBehaviour
     void Update()
     {
         FindClosestEnemy();
-        //Vector3 direction = cat.transform.position - transform.position;
+        //Vector3 direction = Guy.transform.position - transform.position;
         //float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
         //Quaternion rotation = Quaternion.AngleAxis(angle, Vector3.forward);
         //transform.rotation = Quaternion.RotateTowards(transform.rotation, rotation, Time.deltaTime * lookSpeed);
@@ -26,9 +26,9 @@ public class en_shooting : MonoBehaviour
     void FindClosestEnemy()
     {
         float distanceToClosestEnemy = Mathf.Infinity;
-        Cat closestEnemy = null;
-        Cat[] allEnemies = GameObject.FindObjectsOfType<Cat>();
-        foreach (Cat currentEnemy in allEnemies)
+        Guy closestEnemy = null;
+        Guy[] allEnemies = GameObject.FindObjectsOfType<Guy>();
+        foreach (Guy currentEnemy in allEnemies)
         {
             float distanceToEnemy = (currentEnemy.transform.position - this.transform.position).sqrMagnitude;
             if (distanceToEnemy < distanceToClosestEnemy)
