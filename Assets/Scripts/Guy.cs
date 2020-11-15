@@ -89,7 +89,43 @@ public class Guy : MonoBehaviour
 
     public void MoveAI()
     {
+        bool moving = false;
+        float dirX = 1f;
+        bool endTurn = Input.GetKey(KeyCode.Space);
+        Vector3 localScale = transform.localScale;
+        if (distanceMoved >= maxDistance)
+        {
+            currentState = State.Acting;
+        }
+        else
+        {
+            if (transform.position.x < -11f)     // Fix space 
+            {
+                dirX = 1f;
+            }
+            else if (transform.position.x > 11f)
+            {
+                dirX = -1f;
+            }
 
+            body.velocity = new Vector2(dirX * speed, body.velocity.y);
+
+            if (dirX > 0)
+            {
+                moving = true;
+            }
+            else if (dirX < 0)
+            {
+                moving = false;
+            }
+
+            if (((moving) && (localScale.x < 0)) || ((!moving) && (localScale.x > 0)))
+            {
+                localScale.x *= -1;
+            }
+
+            transform.localScale = localScale;
+        }
     }
 
     void SelectWeapon(GameManager.WeaponType weaponType)
