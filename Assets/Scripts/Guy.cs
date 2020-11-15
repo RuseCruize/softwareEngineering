@@ -28,8 +28,8 @@ public class Guy : MonoBehaviour
     public LayerMask groundLayer;
     public SpriteRenderer spriteRenderer;
 
-    public int maxHealth;
-    public int health;
+    public float maxHealth;
+    public float health;
     public string owner;
 
     //[SerializeField] HealthBar healthBar;
