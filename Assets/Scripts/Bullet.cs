@@ -5,6 +5,7 @@ using UnityEngine.Tilemaps;
 
 public class Bullet : MonoBehaviour
 {
+    public AudioSource audiosource;
     public int speedMultiplier;
     public bool flipped;
     public bool stopped;
@@ -46,6 +47,7 @@ public class Bullet : MonoBehaviour
             Guy guy = hit.gameObject.GetComponent<Guy>();
             MatchManager matchManager = FindObjectOfType<MatchManager>();
             Player currentPlayer = matchManager.players[matchManager.currentPlayer];
+ 
 
             if (hit.gameObject == currentPlayer.guys[currentPlayer.currentGuy])
             {
@@ -57,6 +59,8 @@ public class Bullet : MonoBehaviour
             }
             else
             {
+                audiosource = GetComponent<AudioSource>();
+                audiosource.Play(0);
                 Debug.Log(matchManager.players[matchManager.currentPlayer].playerName);
                 Debug.Log(guy.owner);
                 stopped = true;

@@ -5,7 +5,9 @@ using UnityEngine;
 public class Guy : MonoBehaviour
 {
     public static int maxDistance = 5;
-
+    public AudioSource audiosource;
+    public AudioClip clip;
+    public AudioClip sword;
     public float startPosition;
 
     public enum State
@@ -429,6 +431,9 @@ public class Guy : MonoBehaviour
                 GameObject damageFlash = GameObject.Instantiate(GameManager.STATE.MacheteFlash);
                 damageFlash.transform.position = currentWeapon.transform.position;
                 damageFlash.transform.rotation = currentWeapon.transform.rotation;
+                audiosource = GetComponent<AudioSource>();
+                audiosource.clip = sword;
+                audiosource.Play();
                 if (spriteRenderer.flipX)
                 {
                     damageFlash.transform.localScale = new Vector3(-10, 5, 5);
@@ -440,6 +445,9 @@ public class Guy : MonoBehaviour
                 Bullet bulletScript = bullet.GetComponent<Bullet>();
                 bullet.transform.position = currentWeapon.transform.position;
                 bullet.transform.rotation = currentWeapon.transform.rotation;
+                audiosource = GetComponent<AudioSource>();
+                audiosource.clip = clip;
+                audiosource.Play();
                 if (spriteRenderer.flipX)
                 {
                     bulletScript.flipped = true;

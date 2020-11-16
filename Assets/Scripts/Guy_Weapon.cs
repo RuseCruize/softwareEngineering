@@ -18,20 +18,22 @@ public class Guy_Weapon : MonoBehaviour
     public float weaponVelocity = 10f;
     public int bulletsPerMagazine = 1;
     public float weaponDamage = 30;
-    public AudioClip fireAudio;
+   // public AudioClip fireAudio;
+    public AudioSource audiosource;
 
     [HideInInspector]
     public Guy_WeaponManager manager;
 
     float nextFireTime = 0;
     int bulletsPerMagazineDefault = 1;
-    AudioSource audioSource;
+    //AudioSource audioSource;
     SpriteRenderer sprite;
     void Start()
     {
-        audioSource = GetComponent<AudioSource>();
-        audioSource.playOnAwake = false;
-        audioSource.spatialBlend = 1f;
+        audiosource = GetComponent<AudioSource>();
+        audiosource.Play(0);
+        //audioSource.playOnAwake = false;
+        //audioSource.spatialBlend = 1f;
         manager.canFire = true;
         sprite = GetComponent<SpriteRenderer>();
     }
@@ -39,12 +41,16 @@ public class Guy_Weapon : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (manager.Aiming) { 
+        if (manager.Aiming) {
+            audiosource = GetComponent<AudioSource>();
+            audiosource.Play(0);
             lookDirection = Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position;
             lookAngle = Mathf.Atan2(lookDirection.y, lookDirection.x) * Mathf.Rad2Deg;
             transform.rotation = Quaternion.Euler(0f, 0f, lookAngle - 90f);
             if (Input.GetMouseButtonDown(0)) {
                 Fire();
+                audiosource = GetComponent<AudioSource>();
+                audiosource.Play(0);
                 manager.Aiming = false;
                 return;
             }
@@ -56,6 +62,8 @@ public class Guy_Weapon : MonoBehaviour
     }
 
     void Fire() {
+        audiosource = GetComponent<AudioSource>();
+        audiosource.Play(0);
         GameObject guyBullet = Instantiate(Guy_Bullet, weaponTip.position, weaponTip.rotation);
         guyBullet.GetComponent<Rigidbody2D>().velocity = weaponTip.up * weaponVelocity;
     }
