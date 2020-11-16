@@ -412,12 +412,16 @@ public class Guy : MonoBehaviour
 
         if (target != null)
         {
+            Vector3 targetPoint = target.transform.position;
+            if (GameManager.STATE.computerLevel == 1)
+            {
+                targetPoint += new Vector3(Random.Range(-1f, 1f), Random.Range(-0.5f, 0.5f), 0);
+            }
+            targetPoint = transform.InverseTransformPoint(targetPoint);
             SelectWeapon(GameManager.WeaponType.Pistol);
-            Debug.Log("Aiming at " + transform.InverseTransformPoint(target.transform.position));
-            Aim(transform.InverseTransformPoint(target.transform.position));
-            Aim(transform.InverseTransformPoint(target.transform.position));
-            Debug.DrawLine(currentWeapon.transform.position, target.transform.position, Color.red, 4f);
-            Debug.DrawLine(currentWeapon.transform.position, target.transform.position - currentWeapon.transform.position, Color.red, 4f);
+            Debug.Log("Aiming at " + targetPoint);
+            Aim(targetPoint);
+            Aim(targetPoint);
             Attack();
         }
         else
