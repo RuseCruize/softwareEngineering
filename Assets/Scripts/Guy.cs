@@ -114,6 +114,10 @@ public class Guy : MonoBehaviour
                 for (int j = 0; j < matchManager.players[i].guys.Count; j++)
                 {
                     guy = matchManager.players[i].guys[j].GetComponent<Guy>();
+                    if (guy.currentState == State.Dead)
+                    {
+                        continue;
+                    }
                     hits = Physics2D.LinecastAll(transform.position, guy.transform.position);
                     // Debug.DrawLine(transform.position, guy.transform.position, Color.red, 0.5f);
                     bool hitWall = false;
