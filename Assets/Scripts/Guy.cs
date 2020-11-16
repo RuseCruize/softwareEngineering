@@ -492,5 +492,6 @@ public class Guy : MonoBehaviour
             spriteRenderer.material.color = newColor;
             yield return null;
         }
+        gameObject.SetActive(false);
     }
 }
