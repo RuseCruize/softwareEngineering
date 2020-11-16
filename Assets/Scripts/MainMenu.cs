@@ -11,6 +11,11 @@ public class MainMenu : MonoBehaviour
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 
+    void Update()
+    {
+        transform.Find("Title").GetComponent<Text>().text = GameManager.STATE.menuText;
+    }
+
     public void QuitGame()
     {
         Application.Quit();

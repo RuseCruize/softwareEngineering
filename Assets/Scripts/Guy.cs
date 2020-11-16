@@ -184,7 +184,7 @@ public class Guy : MonoBehaviour
 
         switch (computerLevel)
         {
-            case 1:
+            case 2:
                 visibleGuys = GetVisibleEnemies();
                 if (visibleGuys.Count > 0)
                 {
@@ -193,12 +193,12 @@ public class Guy : MonoBehaviour
                 }
                 else
                 {
-                    nextNodeIndex = Random.Range(0, currentNode.adjacentNodes.Count);
-                    Debug.Log("EZ: See no enemies, moving to random adjacent point: " + currentNode.adjacentNodes[nextNodeIndex]);
+                    nextNodeIndex = 0;
+                    Debug.Log("EZ: See no enemies, moving to next adjacent point: " + currentNode.adjacentNodes[nextNodeIndex]);
                 }
                 break;
 
-            case 2:
+            case 1:
                 visibleGuys = GetVisibleEnemies();
                 if (visibleGuys.Count > 0)
                 {
@@ -268,10 +268,7 @@ public class Guy : MonoBehaviour
             }
 
             nextNodeIndex = -100;
-            if (isGrounded())
-            {
-                currentState = State.Acting;
-            }
+            currentState = State.Acting;
         }
         else
         {
@@ -409,19 +406,20 @@ public class Guy : MonoBehaviour
 
     public void ActAI(int computerLevel)
     {
+
         List<Guy> visibleGuys = GetVisibleEnemies();
         Guy target = null;
 
         switch (computerLevel)
         {
-            case 1:
+            case 2:
                 if (visibleGuys.Count > 0)
                 {
                     target = visibleGuys[0];
                 }
                 break;
 
-            case 2:
+            case 1:
                 if (visibleGuys.Count > 0)
                 {
                     target = visibleGuys[0];
@@ -447,20 +445,14 @@ public class Guy : MonoBehaviour
 
             if (computerLevel == 2)
             {
-                if (Vector3.Distance(transform.position, target.transform.position) < 0.5f)
+                if (Vector3.Distance(transform.position, target.transform.position) < 0.5f && Vector3.Distance(transform.position, target.transform.position) > 0.01f)
                 {
                     Debug.Log("Close, sword" + Vector3.Distance(transform.position, target.transform.position));
                     SelectWeapon(GameManager.WeaponType.Machete);
                 }
-
-                RaycastHit2D[] hits = Physics2D.RaycastAll(transform.position, targetPoint);
-                foreach (RaycastHit2D hit in hits)
+                else
                 {
-                    if (hit.collider.gameObject.tag == "Guy" && hit.collider.gameObject.GetComponent<Guy>().owner == owner)
-                    {
-                        Debug.Log("Ally will be shot, sword");
-                        SelectWeapon(GameManager.WeaponType.Machete);
-                    }
+                    SelectWeapon(GameManager.WeaponType.Pistol);
                 }
             }
             else

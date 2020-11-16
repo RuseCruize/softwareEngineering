@@ -25,6 +25,7 @@ public class GameManager : MonoBehaviour
 
     public int MacheteDamage;
     public int BulletDamage;
+    public string menuText;
 
     public enum WeaponType
     {

@@ -168,7 +168,18 @@ public class MatchManager : MonoBehaviour
             }
         }
         else {
-            SceneManager.LoadScene(0);
+            foreach (Player p in players)
+            {
+                foreach (GameObject g in p.guys){
+                    if (g.GetComponent<Guy>().health > 0)
+                    {
+                        Debug.Log(p.playerName + " wins! " + p.computerLevel);
+                        GameManager.STATE.menuText = p.playerName + " Won!";
+                        SceneManager.LoadScene(0);
+                        return;
+                    }
+                }
+            }
         }
     }
 }

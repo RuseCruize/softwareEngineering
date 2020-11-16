@@ -5,9 +5,11 @@ using UnityEngine;
 public class HealthBar : MonoBehaviour {
 
     private Transform bar;
+    private TextMesh text;
 
 	private void Awake () {
         bar = transform.Find("Bar");
+        text = GetComponent<TextMesh>();
 	}
 
     public void SetSize(float sizeNormalized) {
@@ -16,5 +18,10 @@ public class HealthBar : MonoBehaviour {
 
     public void SetColor(Color color) {
         bar.Find("BarSprite").GetComponent<SpriteRenderer>().color = color;
+    }
+
+    public void SetText(string name)
+    {
+        text.text = name;
     }
 }
