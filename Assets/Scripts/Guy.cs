@@ -59,9 +59,9 @@ public class Guy : MonoBehaviour
         {
             startPosition = transform.position.x;
             currentState = State.Moving;
-            currentWeaponType = GameManager.WeaponType.Unarmed;
-            currentWeapon = null;
+            SelectWeapon(GameManager.WeaponType.Unarmed);
             nextNodeIndex = -100;
+            distanceMoved = 0;
         }
     }
 
@@ -115,7 +115,7 @@ public class Guy : MonoBehaviour
                 {
                     guy = matchManager.players[i].guys[j].GetComponent<Guy>();
                     hits = Physics2D.LinecastAll(transform.position, guy.transform.position);
-                    Debug.DrawLine(transform.position, guy.transform.position, Color.red, 0.5f);
+                    // Debug.DrawLine(transform.position, guy.transform.position, Color.red, 0.5f);
                     bool hitWall = false;
                     foreach (RaycastHit2D hit in hits)
                     {
@@ -240,18 +240,21 @@ public class Guy : MonoBehaviour
             ChooseNextNode();
         }
 
-        if (nextNodeIndex == -1 || Mathf.Abs(transform.position.x - currentNode.adjacentNodes[nextNodeIndex].transform.position.x) < 0.01f)
+        if (nextNodeIndex == -1 || distanceMoved >= maxDistance || Mathf.Abs(transform.position.x - currentNode.adjacentNodes[nextNodeIndex].transform.position.x) < 0.01f)
         {
             
             if (nextNodeIndex >= 0)
             {
-                Debug.Log(transform.position.x - currentNode.adjacentNodes[nextNodeIndex].transform.position.x);
+                // Debug.Log(transform.position.x - currentNode.adjacentNodes[nextNodeIndex].transform.position.x);
                 Debug.Log("Reached destination " + currentNode.adjacentNodes[nextNodeIndex].gameObject.name);
                 currentNode = currentNode.adjacentNodes[nextNodeIndex];
             }
 
-            nextNodeIndex = -100;
-            currentState = State.Acting;
+            if (isGrounded())
+            {
+                nextNodeIndex = -100;
+                currentState = State.Acting;
+            }
         }
         else
         {
@@ -269,6 +272,9 @@ public class Guy : MonoBehaviour
             {
                 transform.position -= transform.right * speed * Time.deltaTime;
             }
+
+            float endPosition = transform.position.x;
+            distanceMoved = Mathf.Abs(startPosition - endPosition);
         }
         
     }
@@ -293,12 +299,14 @@ public class Guy : MonoBehaviour
                 break;
         }
 
-        currentWeapon.transform.parent = transform;
+        if (currentWeapon != null)
+            currentWeapon.transform.parent = transform;
     }
 
     public void Aim(Vector3 target)
     {
         Vector3 guyCenter = target + currentWeapon.transform.position - transform.position;
+
         if (guyCenter.x >= 0)
         {
             currentWeapon.GetComponent<SpriteRenderer>().flipX = false;
@@ -341,7 +349,7 @@ public class Guy : MonoBehaviour
                 lookAngle = Mathf.Clamp(lookAngle, -180, -130);
             }
 
-            lookAngle = lookAngle + 180;
+            lookAngle += 180;
         }
         else
         {
@@ -376,7 +384,6 @@ public class Guy : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             Attack();
-            SelectWeapon(GameManager.WeaponType.Unarmed);
             currentState = State.Waiting;
         }
     }
@@ -406,9 +413,11 @@ public class Guy : MonoBehaviour
         if (target != null)
         {
             SelectWeapon(GameManager.WeaponType.Pistol);
-            Debug.Log("Aiming at " + target.transform.position);
-            Aim(target.transform.position);
-            Debug.DrawLine(currentWeapon.transform.position, target.transform.position, Color.green, 10f);
+            Debug.Log("Aiming at " + transform.InverseTransformPoint(target.transform.position));
+            Aim(transform.InverseTransformPoint(target.transform.position));
+            Aim(transform.InverseTransformPoint(target.transform.position));
+            Debug.DrawLine(currentWeapon.transform.position, target.transform.position, Color.red, 4f);
+            Debug.DrawLine(currentWeapon.transform.position, target.transform.position - currentWeapon.transform.position, Color.red, 4f);
             Attack();
         }
         else
@@ -419,7 +428,6 @@ public class Guy : MonoBehaviour
             Attack();
         }
 
-        SelectWeapon(GameManager.WeaponType.Unarmed);
         currentState = State.Waiting;
     }
 
@@ -474,6 +482,7 @@ public class Guy : MonoBehaviour
         {
             health = 0;
             currentState = State.Dead;
+            SelectWeapon(GameManager.WeaponType.Unarmed);
             StartCoroutine(Disappear());
         }
     }

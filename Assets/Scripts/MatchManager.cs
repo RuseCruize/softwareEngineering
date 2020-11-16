@@ -158,7 +158,7 @@ public class MatchManager : MonoBehaviour
                     break;
 
                 case Guy.State.Dead:
-                    Debug.Log("DEAD");
+                    // Debug.Log("DEAD");
                     NextTurn();
                     break;
             }
