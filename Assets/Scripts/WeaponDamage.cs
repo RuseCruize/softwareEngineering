@@ -39,25 +39,25 @@ public class WeaponDamage : MonoBehaviour
                 if (hitGuy.health > 0)
                 {
                     hitGuy.TakeDamage(GameManager.STATE.MacheteDamage);
-                    Debug.Log("Damaged Guy.");
-                    Debug.Log(matchManager.players[matchManager.currentPlayer].playerName);
-                    Debug.Log(hitGuy.owner);
+                    // Debug.Log("Damaged Guy.");
+                    // Debug.Log(matchManager.players[matchManager.currentPlayer].playerName);
+                    // Debug.Log(hitGuy.owner);
                 }
             }
             else
             {
-                Debug.Log(hitTag);
+                // Debug.Log(hitTag);
             }
         }
         else
         {
             if (hitGuy == null)
             {
-                Debug.Log("Failed to hit non-guy.");
+                // Debug.Log("Failed to hit non-guy.");
             }
             else
             {
-                Debug.Log("Failed to hit own team (self or other).");
+                // Debug.Log("Failed to hit own team (self or other).");
             }
         }
     }
