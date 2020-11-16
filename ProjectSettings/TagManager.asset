@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Team1
   - Team2
+  - MacheteDamage
+  - Guy
   layers:
   - Default
   - TransparentFX
@@ -17,7 +19,7 @@ TagManager:
   - 
   - Ground
   - Units
-  - 
+  - Effect
   - 
   - 
   - 

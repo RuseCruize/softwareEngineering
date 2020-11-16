@@ -1,31 +1,39 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class MatchManager : MonoBehaviour
 {
     public int numGuys;
     private int numPlayers;
     public List<GameObject> spawnPoints;
+    public NavNode[] navNodes;
+    public Guy currentGuy;
 
     public int turn;
     public Player[] players;
     public int currentPlayer;
     bool started;
 
+    public bool advanceTurn;
+
     void Start()
     {
+        advanceTurn = false;
         started = false;
         numPlayers = GameManager.STATE.numPlayers;
         int neededSpawns = numGuys * numPlayers;
         
         if (neededSpawns > spawnPoints.Count)
         {
-            numGuys = 1; // reduce number of guys if we can't support it
+            numGuys = 1; // reduce number of guys if we can't support it on this map
         }
 
         CreatePlayers();
         SpawnGuys();
+        StartGame();
+        navNodes = FindObjectsOfType<NavNode>();
         started = true;
     }
 
@@ -33,7 +41,7 @@ public class MatchManager : MonoBehaviour
     {
         players = new Player[numPlayers];
 
-        for (int i = 0; i < numPlayers; i++)
+        for (int i = 1; i < numPlayers; i++)
         {
             if (i >= numPlayers / 2)
             {
@@ -44,8 +52,6 @@ public class MatchManager : MonoBehaviour
                 players[i] = new Player("Player 1", numGuys, GameManager.STATE.leftPlayerLevels);
             }
         }
-        
-        currentPlayer = 0;
     }
 
     public void SpawnGuys()
@@ -56,23 +62,23 @@ public class MatchManager : MonoBehaviour
         {
             if (numGuys == 1)
             {
-                players[0].SpawnGuy(spawnPoints[0].transform.position);
-                players[1].SpawnGuy(spawnPoints[3].transform.position);
+                players[0].SpawnGuy(spawnPoints[0]);
+                players[1].SpawnGuy(spawnPoints[3]);
             }
             else
             {
-                players[0].SpawnGuy(spawnPoints[0].transform.position);
-                players[0].SpawnGuy(spawnPoints[1].transform.position);
-                players[1].SpawnGuy(spawnPoints[2].transform.position);
-                players[1].SpawnGuy(spawnPoints[3].transform.position);
+                players[0].SpawnGuy(spawnPoints[0]);
+                players[0].SpawnGuy(spawnPoints[1]);
+                players[1].SpawnGuy(spawnPoints[2]);
+                players[1].SpawnGuy(spawnPoints[3]);
             }
         }
         else
         {
-            players[0].SpawnGuy(spawnPoints[0].transform.position);
-            players[1].SpawnGuy(spawnPoints[1].transform.position);
-            players[2].SpawnGuy(spawnPoints[2].transform.position);
-            players[3].SpawnGuy(spawnPoints[3].transform.position);
+            players[0].SpawnGuy(spawnPoints[0]);
+            players[1].SpawnGuy(spawnPoints[1]);
+            players[2].SpawnGuy(spawnPoints[2]);
+            players[3].SpawnGuy(spawnPoints[3]);
         }
     }
 
@@ -84,15 +90,19 @@ public class MatchManager : MonoBehaviour
         bool hasGuy = false;
         for (int i = 0; i < numPlayers; i++)
         {
-            if (players[i].guys.Count > 0)
+            for (int j = 0; j < players[i].guys.Count; j++)
             {
-                if (hasGuy)
+                if (players[i].guys[j].GetComponent<Guy>().currentState != Guy.State.Dead)
                 {
-                    return true;
-                }
-                else
-                {
-                    hasGuy = true;
+                    if (hasGuy)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        hasGuy = true;
+                        break;
+                    }
                 }
             }
         }
@@ -100,19 +110,67 @@ public class MatchManager : MonoBehaviour
         return false;
     }
 
+    void StartGame()
+    {
+        currentPlayer = 0;
+        currentGuy = players[currentPlayer].GetGuy().GetComponent<Guy>();
+        currentGuy.Activate();
+    }
+
+    void NextTurn()
+    {
+        currentPlayer = (currentPlayer + 1) % players.Length;
+        players[currentPlayer].NextGuy();
+        currentGuy = players[currentPlayer].GetGuy().GetComponent<Guy>();
+        currentGuy.Activate();
+        turn++;
+    }
+
     void Update()
     {
         if (GameContinues())
         {
-            if (Input.GetKeyDown(KeyCode.Space))
+            switch(currentGuy.currentState)
             {
-                players[currentPlayer].NextGuy();
-                currentPlayer = (currentPlayer + 1) % players.Length;
-            }
+                case Guy.State.Moving:
+                    if (players[currentPlayer].isComputer)
+                    {
+                        currentGuy.MoveAI();
+                    }
+                    else
+                    {
+                        currentGuy.Move();
+                    }
+                    break;
 
-            GameObject currentGuy = players[currentPlayer].GetGuy();
-            currentGuy.GetComponent<Guy>().Move();
-            
+                case Guy.State.Acting:
+                    if (players[currentPlayer].isComputer)
+                    {
+                        currentGuy.ActAI();
+                    }
+                    else
+                    {
+                        currentGuy.Act();
+                    }
+                        
+                    break;
+
+                case Guy.State.Waiting:
+                    if (advanceTurn)
+                    {
+                        advanceTurn = false;
+                        NextTurn();
+                    }
+                    break;
+
+                case Guy.State.Dead:
+                    // Debug.Log("DEAD");
+                    NextTurn();
+                    break;
+            }
+        }
+        else {
+            SceneManager.LoadScene(0);
         }
     }
 }
