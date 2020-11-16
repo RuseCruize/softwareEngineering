@@ -187,8 +187,8 @@ public class Guy : MonoBehaviour
                 }
                 else
                 {
-                    Debug.Log("EZ: See no enemies, moving to first adjacent point: " + currentNode.adjacentNodes[0]);
-                    nextNodeIndex = 0;
+                    nextNodeIndex = Random.Range(0, currentNode.adjacentNodes.Count);
+                    Debug.Log("EZ: See no enemies, moving to random adjacent point: " + currentNode.adjacentNodes[nextNodeIndex]);
                 }
                 break;
 
@@ -230,6 +230,7 @@ public class Guy : MonoBehaviour
                         }
                     }
                     FindNextNearestNode(target.transform.position);
+                    Debug.Log(nextNodeIndex);
                     Debug.Log("Moving to " + currentNode.adjacentNodes[nextNodeIndex].gameObject.name);
                 }
                 break;
@@ -254,9 +255,9 @@ public class Guy : MonoBehaviour
                 currentNode = currentNode.adjacentNodes[nextNodeIndex];
             }
 
+            nextNodeIndex = -100;
             if (isGrounded())
             {
-                nextNodeIndex = -100;
                 currentState = State.Acting;
             }
         }
