@@ -40,11 +40,17 @@ public class MatchManager : MonoBehaviour
     public void CreatePlayers()
     {
         players = new Player[numPlayers];
-        players[0] = new Player("Player 1", numGuys, 0); // human
 
         for (int i = 1; i < numPlayers; i++)
         {
-            players[i] = new Player("Player " + (i + 1), numGuys, GameManager.STATE.computerLevel); // potentially AI
+            if (i >= numPlayers / 2)
+            {
+                players[i] = new Player("Player 1", numGuys, GameManager.STATE.rightPlayerLevels);
+            }
+            else
+            {
+                players[i] = new Player("Player 1", numGuys, GameManager.STATE.leftPlayerLevels);
+            }
         }
     }
 

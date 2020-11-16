@@ -11,8 +11,10 @@ public class GameManager : MonoBehaviour
     public Dropdown playerDropdown;
     public int numPlayers;
 
-    public Dropdown enemyDropdown;
-    public int computerLevel;
+    public Dropdown rightDropdown;
+    public Dropdown leftDropdown;
+    public int rightPlayerLevels;
+    public int leftPlayerLevels;
 
     public GameObject guyPrefab;
 
@@ -46,6 +48,8 @@ public class GameManager : MonoBehaviour
     {
         volume = volumeSlider.value;
         numPlayers = int.Parse(playerDropdown.options[playerDropdown.value].text);
-        computerLevel = enemyDropdown.value;
+        Debug.Log(rightDropdown.value + " " + leftDropdown.value);
+        rightPlayerLevels = rightDropdown.value;
+        leftPlayerLevels = leftDropdown.value;
     }
 }
