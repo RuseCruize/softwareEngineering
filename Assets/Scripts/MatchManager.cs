@@ -41,23 +41,23 @@ public class MatchManager : MonoBehaviour
     {
         players = new Player[numPlayers];
 
-        for (int i = 1; i < numPlayers; i++)
+        for (int i = 0; i < numPlayers; i++)
         {
             if (i >= numPlayers / 2)
             {
-                players[i] = new Player("Player 1", numGuys, GameManager.STATE.rightPlayerLevels);
+                players[i] = new Player("Player " + (i+1), numGuys, GameManager.STATE.rightPlayerLevels);
             }
             else
             {
-                players[i] = new Player("Player 1", numGuys, GameManager.STATE.leftPlayerLevels);
+                players[i] = new Player("Player " + (i+1), numGuys, GameManager.STATE.leftPlayerLevels);
             }
         }
     }
 
     public void SpawnGuys()
     {
-        int neededSpawns = numGuys * numPlayers;
-
+        Debug.Log(players[0]);
+        Debug.Log(spawnPoints.Count);
         if (numPlayers == 2)
         {
             if (numGuys == 1)

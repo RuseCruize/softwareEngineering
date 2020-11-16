@@ -48,7 +48,7 @@ public class GameManager : MonoBehaviour
     {
         volume = volumeSlider.value;
         numPlayers = int.Parse(playerDropdown.options[playerDropdown.value].text);
-        Debug.Log(rightDropdown.value + " " + leftDropdown.value);
+        // Debug.Log(rightDropdown.value + " " + leftDropdown.value);
         rightPlayerLevels = rightDropdown.value;
         leftPlayerLevels = leftDropdown.value;
     }
