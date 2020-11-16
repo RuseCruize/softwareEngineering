@@ -172,11 +172,11 @@ public class Guy : MonoBehaviour
         }
     }
 
-    void ChooseNextNode()
+    void ChooseNextNode(int computerLevel)
     {
         List<Guy> visibleGuys;
 
-        switch (GameManager.STATE.computerLevel)
+        switch (computerLevel)
         {
             case 1:
                 visibleGuys = GetVisibleEnemies();
@@ -236,12 +236,12 @@ public class Guy : MonoBehaviour
         }
     }
 
-    public void MoveAI()
+    public void MoveAI(int computerLevel)
     {
         if (nextNodeIndex == -100)
         {
             Debug.Log("Choosing next position...");
-            ChooseNextNode();
+            ChooseNextNode(computerLevel);
         }
 
         if (nextNodeIndex == -1 || distanceMoved >= maxDistance || Mathf.Abs(transform.position.x - currentNode.adjacentNodes[nextNodeIndex].transform.position.x) < 0.01f)
@@ -392,12 +392,12 @@ public class Guy : MonoBehaviour
         }
     }
 
-    public void ActAI()
+    public void ActAI(int computerLevel)
     {
         List<Guy> visibleGuys = GetVisibleEnemies();
         Guy target = null;
 
-        switch (GameManager.STATE.computerLevel)
+        switch (computerLevel)
         {
             case 1:
                 if (visibleGuys.Count > 0)
@@ -417,7 +417,7 @@ public class Guy : MonoBehaviour
         if (target != null)
         {
             Vector3 targetPoint = target.transform.position;
-            if (GameManager.STATE.computerLevel == 1)
+            if (computerLevel == 1)
             {
                 targetPoint += new Vector3(Random.Range(-1f, 1f), Random.Range(-0.5f, 0.5f), 0);
             }

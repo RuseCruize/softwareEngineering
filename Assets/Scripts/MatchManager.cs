@@ -129,7 +129,7 @@ public class MatchManager : MonoBehaviour
                 case Guy.State.Moving:
                     if (players[currentPlayer].isComputer)
                     {
-                        currentGuy.MoveAI();
+                        currentGuy.MoveAI(players[currentPlayer].computerLevel);
                     }
                     else
                     {
@@ -140,7 +140,7 @@ public class MatchManager : MonoBehaviour
                 case Guy.State.Acting:
                     if (players[currentPlayer].isComputer)
                     {
-                        currentGuy.ActAI();
+                        currentGuy.ActAI(players[currentPlayer].computerLevel);
                     }
                     else
                     {
