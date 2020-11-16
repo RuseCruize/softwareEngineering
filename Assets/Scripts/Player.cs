@@ -41,6 +41,7 @@ public class Player
         Guy guyScript = guy.GetComponent<Guy>();
         guyScript.owner = playerName;
         guyScript.currentNode = node;
+
         if (guy.transform.position.x > 0)
         {
             guyScript.spriteRenderer.flipX = true;

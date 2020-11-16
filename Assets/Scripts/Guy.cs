@@ -164,11 +164,17 @@ public class Guy : MonoBehaviour
     {
         for (int i = 0; i < currentNode.adjacentNodes.Count; i++)
         {
+            Debug.Log("Finding next nearest:" + i);
             NavNode node = currentNode.adjacentNodes[i];
-            if (Vector3.Distance(node.transform.position, target) < Vector3.Distance(currentNode.adjacentNodes[nextNodeIndex].transform.position, target))
+            Debug.Log(node.gameObject.name);
+            if (Vector3.Distance(node.transform.position, target) < Vector3.Distance(currentNode.transform.position, target))
             {
                 nextNodeIndex = i;
             }
+        }
+        if (nextNodeIndex < 0)
+        {
+            nextNodeIndex = 0;
         }
     }
 
@@ -209,9 +215,13 @@ public class Guy : MonoBehaviour
                     {
                         nextNodeIndex = -1;
                     }
-                    else if (target.health <= GameManager.STATE.MacheteDamage)
+                    else
                     {
                         FindNextNearestNode(target.transform.position);
+                        if (Vector3.Distance(target.transform.position, currentNode.adjacentNodes[nextNodeIndex].transform.position) > Vector3.Distance(target.transform.position, currentNode.adjacentNodes[nextNodeIndex].transform.position))
+                        {
+                            nextNodeIndex = -1;
+                        }
                     }
                 }
                 else
@@ -229,6 +239,7 @@ public class Guy : MonoBehaviour
                             target = enemy;
                         }
                     }
+
                     FindNextNearestNode(target.transform.position);
                     Debug.Log(nextNodeIndex);
                     Debug.Log("Moving to " + currentNode.adjacentNodes[nextNodeIndex].gameObject.name);
@@ -243,6 +254,7 @@ public class Guy : MonoBehaviour
         {
             Debug.Log("Choosing next position...");
             ChooseNextNode(computerLevel);
+            Debug.Log("Chose node index: " + nextNodeIndex);
         }
 
         if (nextNodeIndex == -1 || distanceMoved >= maxDistance || Mathf.Abs(transform.position.x - currentNode.adjacentNodes[nextNodeIndex].transform.position.x) < 0.01f)
@@ -272,9 +284,11 @@ public class Guy : MonoBehaviour
             if (targetNode.transform.position.x > transform.position.x)
             {
                 transform.position += transform.right * speed * Time.deltaTime;
+                spriteRenderer.flipX = false;
             }
             else
             {
+                spriteRenderer.flipX = true;
                 transform.position -= transform.right * speed * Time.deltaTime;
             }
 
@@ -411,6 +425,13 @@ public class Guy : MonoBehaviour
                 if (visibleGuys.Count > 0)
                 {
                     target = visibleGuys[0];
+                    foreach (Guy g in visibleGuys)
+                    {
+                        if (g.health < target.health)
+                        {
+                            target = g;
+                        }
+                    }
                 }
                 break;
         }
@@ -423,7 +444,29 @@ public class Guy : MonoBehaviour
                 targetPoint += new Vector3(Random.Range(-1f, 1f), Random.Range(-0.5f, 0.5f), 0);
             }
             targetPoint = transform.InverseTransformPoint(targetPoint);
-            SelectWeapon(GameManager.WeaponType.Pistol);
+
+            if (computerLevel == 2)
+            {
+                if (Vector3.Distance(transform.position, target.transform.position) < 0.5f)
+                {
+                    Debug.Log("Close, sword" + Vector3.Distance(transform.position, target.transform.position));
+                    SelectWeapon(GameManager.WeaponType.Machete);
+                }
+
+                RaycastHit2D[] hits = Physics2D.RaycastAll(transform.position, targetPoint);
+                foreach (RaycastHit2D hit in hits)
+                {
+                    if (hit.collider.gameObject.tag == "Guy" && hit.collider.gameObject.GetComponent<Guy>().owner == owner)
+                    {
+                        Debug.Log("Ally will be shot, sword");
+                        SelectWeapon(GameManager.WeaponType.Machete);
+                    }
+                }
+            }
+            else
+            {
+                SelectWeapon(GameManager.WeaponType.Pistol);
+            }
             Debug.Log("Aiming at " + targetPoint);
             Aim(targetPoint);
             Aim(targetPoint);
