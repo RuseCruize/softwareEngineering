@@ -56,8 +56,6 @@ public class MatchManager : MonoBehaviour
 
     public void SpawnGuys()
     {
-        Debug.Log(players[0]);
-        Debug.Log(spawnPoints.Count);
         if (numPlayers == 2)
         {
             if (numGuys == 1)
