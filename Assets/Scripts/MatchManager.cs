@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class MatchManager : MonoBehaviour
 {
@@ -161,6 +162,9 @@ public class MatchManager : MonoBehaviour
                     NextTurn();
                     break;
             }
+        }
+        else {
+            SceneManager.LoadScene(0);
         }
     }
 }
